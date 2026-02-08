@@ -1,16 +1,78 @@
-# React + Vite
+# React + Vite Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is built using **React** with **Vite**.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Before running the project, make sure you have the following installed:
 
-## React Compiler
+* **Node.js** (version 18 or higher recommended)
+* **npm** or **yarn**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+You can check your Node version by running:
 
-## Expanding the ESLint configuration
+```bash
+node -v
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Getting Started
+
+Follow these steps to run the project locally:
+
+### 1. Clone the repository
+
+```bash
+git clone <REPOSITORY_URL>
+cd <PROJECT_FOLDER>
+```
+
+### 2. Install dependencies
+
+Using npm:
+
+```bash
+npm install
+```
+
+Or using yarn:
+
+```bash
+yarn install
+```
+
+### 3. Environment Variables
+
+Create a `.env` file in the root of the project and add the required environment variables:
+
+```env
+VITE_API_BASE_URL=https://example.com/api
+```
+
+> ⚠️ Make sure all `VITE_` variables are prefixed correctly or they will not work.
+
+### 4. Run the development server
+
+```bash
+npm run dev
+```
+
+Or with yarn:
+
+```bash
+yarn dev
+```
+
+The app will be running at:
+
+```
+http://localhost:5173
+```
+
+
+
+
+
+
+
+
+
