@@ -25,7 +25,6 @@ const SideBar = () => {
   const handleLogout = () => {
     dispatch(logout());
     dispatch(logoutApi(token));
-    localStorage.removeItem('token');
     navigate('/login');
   };
 
