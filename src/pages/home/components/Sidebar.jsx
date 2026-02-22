@@ -9,7 +9,7 @@ import { TbUsers } from "react-icons/tb";
 import { IoCallOutline } from "react-icons/io5";
 import { TbHeartRateMonitor } from "react-icons/tb";
 import { CiSettings } from 'react-icons/ci';
-import { logout, logoutApi } from '../../../redux/slices/authSlice';
+import { logout, logoutApi } from '../../../redux/slices/AuthSlice/authReducer';
 import { useSelector } from 'react-redux';
 
 const SideBar = () => {
@@ -51,9 +51,9 @@ const SideBar = () => {
       </button>
 
 
-      <SidebarItems icon={<LuLayoutDashboard />} label="Dashboard" isOpen={isOpen} />
-      <SidebarItems icon={<TbUsers />} label="Leads" isOpen={isOpen} />
-      <SidebarItems icon={<IoCallOutline />} label="Call Logs" isOpen={isOpen} />
+      <SidebarItems icon={<LuLayoutDashboard />} label="Dashboard" isOpen={isOpen} onClick={() => navigate('/')} />
+      <SidebarItems icon={<TbUsers />} label="Leads" isOpen={isOpen} onClick={() => navigate('/leads')} />
+      <SidebarItems icon={<IoCallOutline />} label="Call Logs" isOpen={isOpen} onClick={()=>navigate('/calllogs')}/>
       <SidebarItems icon={<TbHeartRateMonitor />} label="Ai Monitoring" isOpen={isOpen} />
       <SidebarItems icon={<CiSettings size={20}/>} label="Setting" isOpen={isOpen} />
       <SidebarItems icon={<FaSignOutAlt />} label="Logout" isOpen={isOpen} onClick={handleLogout} />
