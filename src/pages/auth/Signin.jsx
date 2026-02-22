@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { MdEmail, MdLock } from 'react-icons/md'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import { login, clearError } from '../../redux/slices/authSlice'
+import { login, clearError } from '../../redux/slices/AuthSlice/authReducer'
 
 const Signin = () => {
   const dispatch = useDispatch()
