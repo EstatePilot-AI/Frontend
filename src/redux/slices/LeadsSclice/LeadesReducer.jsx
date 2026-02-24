@@ -44,7 +44,13 @@ const leadsSlice = createSlice({
       })
       .addCase(fetchLeads.fulfilled, (state, action) => {
         state.loading = false
-        state.leads = action.payload
+        const payload = action.payload
+        const items = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.data)
+          ? payload.data
+          : []
+        state.leads = items
         state.error = null
       })
       .addCase(fetchLeads.rejected, (state, action) => {

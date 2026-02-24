@@ -30,15 +30,24 @@ const Leads = () => {
   }, [dispatch])
 
   const filteredLeads = useMemo(() => {
-    return leads.filter((lead) => {
+    const list = Array.isArray(leads) ? leads : []
+    if (!Array.isArray(leads)) console.warn('`leads` is not an array:', leads)
+
+    return list.filter((lead) => {
+      const statusName = lead?.statusName || ''
+      const buyerName = (lead?.buyerName || '').toLowerCase()
+      const buyerPhone = lead?.buyerPhone || ''
+
       const matchFilter =
         activeFilter === 'all' ||
-        lead.statusName.toLowerCase().replace(/\s/g, '-') === activeFilter ||
-        (activeFilter === 'qualified' && lead.statusName === 'Qualified for property')
+        statusName.toLowerCase().replace(/\s/g, '-') === activeFilter ||
+        (activeFilter === 'qualified' && statusName === 'Qualified for property')
+
       const matchSearch =
         !search.trim() ||
-        lead.buyerName.toLowerCase().includes(search.toLowerCase()) ||
-        lead.buyerPhone.includes(search)
+        buyerName.includes(search.toLowerCase()) ||
+        buyerPhone.includes(search)
+
       return matchFilter && matchSearch
     })
   }, [leads, activeFilter, search])

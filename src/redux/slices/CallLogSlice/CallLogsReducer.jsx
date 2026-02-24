@@ -72,7 +72,13 @@ const callLogsSlice = createSlice({
       })
       .addCase(fetchCallLogs.fulfilled, (state, action) => {
         state.loading = false
-        state.callLogs = action.payload
+        const payload = action.payload
+        const items = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.data)
+          ? payload.data
+          : []
+        state.callLogs = items
         state.error = null
       })
       .addCase(fetchCallLogs.rejected, (state, action) => {
