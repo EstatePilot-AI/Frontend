@@ -25,7 +25,8 @@ const Signin = () => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error)
+      const customError = error.includes('400') || error.includes('validation') || error.includes('Invalid') ? 'Invalid email or password' : error
+      toast.error(customError)
     }
     return () => dispatch(clearError())
   }, [error, dispatch])
@@ -100,7 +101,7 @@ const Signin = () => {
               </button>
             </div>
           </div>
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -113,7 +114,7 @@ const Signin = () => {
             <a href="#" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
               Forgot password?
             </a>
-          </div>
+          </div> */}
           <button
             type="submit"
             disabled={loading}
@@ -124,13 +125,6 @@ const Signin = () => {
         </form>
 
         
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
-          <a href="#" className="text-blue-600 hover:text-blue-700 font-medium">
-            Sign up
-          </a>
-        </p>
-
         <p className="mt-8 text-center text-xs text-gray-500">
           Protected by enterprise-grade security
         </p>
