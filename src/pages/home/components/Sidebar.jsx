@@ -55,7 +55,7 @@ const SideBar = () => {
       <SidebarItems icon={<TbUsers />} label="Leads" isOpen={isOpen} onClick={() => navigate('/leads')} />
       <SidebarItems icon={<IoCallOutline />} label="Call Logs" isOpen={isOpen} onClick={()=>navigate('/calllogs')}/>
       <SidebarItems icon={<TbHeartRateMonitor />} label="Ai Monitoring" isOpen={isOpen} />
-      <SidebarItems icon={<CiSettings size={20}/>} label="Setting" isOpen={isOpen} />
+      <SidebarItems icon={<CiSettings size={20}/>} label="Setting" isOpen={isOpen} onClick={() => navigate('/settings')} />
       <SidebarItems icon={<FaSignOutAlt />} label="Logout" isOpen={isOpen} onClick={handleLogout} />
 
 
