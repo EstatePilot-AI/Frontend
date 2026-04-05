@@ -7,7 +7,7 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
+     
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900">Call Details</h2>
           <button
@@ -18,7 +18,7 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
           </button>
         </div>
 
-        {/* Content */}
+
         <div className="p-6">
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
@@ -32,7 +32,7 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
             </div>
           ) : callLog ? (
             <div className="space-y-6">
-              {/* Basic Info */}
+           
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1">Buyer Name</label>
@@ -79,6 +79,10 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
                   <p className="text-base text-gray-900">{callLog.callId}</p>
                 </div>
                 <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Record ID</label>
+                  <p className="text-base text-gray-900">{callLog.callRecordingId || 'N/A'}</p>
+                </div>
+                <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1">Timestamp</label>
                   <p className="text-base text-gray-900">
                     {new Date(callLog.timeStamp).toLocaleString()}
@@ -86,7 +90,6 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
                 </div>
               </div>
 
-              {/* Summary */}
               {callLog.summary && (
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-2">Call Summary</label>
