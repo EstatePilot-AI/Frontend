@@ -1,23 +1,33 @@
 import React from 'react'
 import { MdClose } from 'react-icons/md'
+import { useNavigate } from 'react-router-dom'
 
 const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
+  const navigate = useNavigate()
   if (!isOpen) return null
+  if (!callLog) return null
 
+  const handleClick = () => {
+    navigate(`/conversation/${callLog.callRecordingId}`)
+  }
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-1 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-white/10">
       <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-     
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900">Call Details</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 transition"
-          >
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Record ID</label>
+            <button
+              onClick={() => handleClick()}
+              className="text-base cursor-pointer text-gray-900"
+            >
+              {callLog.callRecordingId || 'N/A'}
+            </button>
+          </div>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 transition">
             <MdClose size={24} />
           </button>
         </div>
-
 
         <div className="p-6">
           {error && (
@@ -32,7 +42,6 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
             </div>
           ) : callLog ? (
             <div className="space-y-6">
-           
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1">Buyer Name</label>
@@ -43,26 +52,34 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
                   <p className="text-base text-gray-900">{callLog.callType}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-1">Call Session State</label>
-                  <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-                    callLog.callSessionState === 'Answered'
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-gray-100 text-gray-600'
-                  }`}>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">
+                    Call Session State
+                  </label>
+                  <span
+                    className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
+                      callLog.callSessionState === 'Answered'
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : 'bg-gray-100 text-gray-600'
+                    }`}
+                  >
                     {callLog.callSessionState}
                   </span>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-1">Call Outcome</label>
-                  <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-                    callLog.callOutcome === 'Interested'
-                      ? 'bg-green-100 text-green-800'
-                      : callLog.callOutcome === 'Not Interested'
-                      ? 'bg-red-100 text-red-800'
-                      : callLog.callOutcome === 'Not Answer'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">
+                    Call Outcome
+                  </label>
+                  <span
+                    className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
+                      callLog.callOutcome === 'Interested'
+                        ? 'bg-green-100 text-green-800'
+                        : callLog.callOutcome === 'Not Interested'
+                          ? 'bg-red-100 text-red-800'
+                          : callLog.callOutcome === 'Not Answer'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-gray-100 text-gray-800'
+                    }`}
+                  >
                     {callLog.callOutcome}
                   </span>
                 </div>
@@ -71,17 +88,16 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
                   <p className="text-base text-gray-900">{callLog.duration} seconds</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-1">Retry Count</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">
+                    Retry Count
+                  </label>
                   <p className="text-base text-gray-900">{callLog.retryCount}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1">Call ID</label>
                   <p className="text-base text-gray-900">{callLog.callId}</p>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-1">Record ID</label>
-                  <p className="text-base text-gray-900">{callLog.callRecordingId || 'N/A'}</p>
-                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1">Timestamp</label>
                   <p className="text-base text-gray-900">
@@ -90,7 +106,7 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
                 </div>
               </div>
 
-              {callLog.summary && (
+              {/* {callLog.summary && (
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-2">Call Summary</label>
                   <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
@@ -99,7 +115,7 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
                     </p>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           ) : (
             <p className="text-center text-gray-500">No call details available</p>

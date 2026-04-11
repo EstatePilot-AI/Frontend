@@ -23,7 +23,9 @@ const SESSION_STATE_STYLES = {
 
 const CallLogs = () => {
   const dispatch = useDispatch()
-  const { callLogs, loading, error, selectedCallLog, detailLoading, detailError } = useSelector((state) => state.callLogs)
+  const { callLogs, loading, error, selectedCallLog, detailLoading, detailError } = useSelector(
+    (state) => state.callLogs
+  )
   const [activeFilter, setActiveFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -48,8 +50,7 @@ const CallLogs = () => {
         (activeFilter === 'answered' && call.callSessionState === 'Answered') ||
         (activeFilter === 'not-answered' && call.callSessionState === 'Not Answerd')
       const matchSearch =
-        !search.trim() ||
-        call.buyerName.toLowerCase().includes(search.toLowerCase())
+        !search.trim() || call.buyerName.toLowerCase().includes(search.toLowerCase())
       return matchFilter && matchSearch
     })
   }, [callLogs, activeFilter, search])
@@ -103,7 +104,6 @@ const CallLogs = () => {
           </div>
         </div>
 
-
         <div className="md:hidden space-y-3">
           {filteredLogs.length === 0 ? (
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm py-12 text-center text-gray-500 text-sm">
@@ -121,7 +121,9 @@ const CallLogs = () => {
                     <p className="text-sm font-semibold text-gray-900">{call.buyerName}</p>
                     <p className="text-sm text-gray-600 mt-0.5">{call.callType}</p>
                   </div>
-                  <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${OUTCOME_STYLES[call.callOutcome] || 'bg-gray-100 text-gray-600'}`}>
+                  <span
+                    className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${OUTCOME_STYLES[call.callOutcome] || 'bg-gray-100 text-gray-600'}`}
+                  >
                     {call.callOutcome}
                   </span>
                 </div>
@@ -129,7 +131,9 @@ const CallLogs = () => {
                   <div>
                     <dt className="text-gray-500 text-xs uppercase tracking-wider">Status</dt>
                     <dd className="text-gray-900 mt-0.5">
-                      <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${SESSION_STATE_STYLES[call.callSessionState] || 'bg-gray-100 text-gray-600'}`}>
+                      <span
+                        className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${SESSION_STATE_STYLES[call.callSessionState] || 'bg-gray-100 text-gray-600'}`}
+                      >
                         {call.callSessionState}
                       </span>
                     </dd>
@@ -156,12 +160,24 @@ const CallLogs = () => {
             <table className="w-full min-w-[800px]">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Buyer Name</th>
-                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Call Type</th>
-                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Status</th>
-                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Outcome</th>
-                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Duration</th>
-                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Time</th>
+                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
+                    Buyer Name
+                  </th>
+                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
+                    Call Type
+                  </th>
+                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
+                    Status
+                  </th>
+                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
+                    Outcome
+                  </th>
+                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
+                    Duration
+                  </th>
+                  <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
+                    Time
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -171,20 +187,32 @@ const CallLogs = () => {
                     className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50/50 transition-colors cursor-pointer"
                     onClick={() => handleViewDetails(call.callId)}
                   >
-                    <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-900 font-medium">{call.buyerName}</td>
-                    <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">{call.callType}</td>
+                    <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-900 font-medium">
+                      {call.buyerName}
+                    </td>
+                    <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">
+                      {call.callType}
+                    </td>
                     <td className="py-3 px-3 lg:py-4 lg:px-5">
-                      <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${SESSION_STATE_STYLES[call.callSessionState] || 'bg-gray-100 text-gray-600'}`}>
+                      <span
+                        className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${SESSION_STATE_STYLES[call.callSessionState] || 'bg-gray-100 text-gray-600'}`}
+                      >
                         {call.callSessionState}
                       </span>
                     </td>
                     <td className="py-3 px-3 lg:py-4 lg:px-5">
-                      <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${OUTCOME_STYLES[call.callOutcome] || 'bg-gray-100 text-gray-600'}`}>
+                      <span
+                        className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${OUTCOME_STYLES[call.callOutcome] || 'bg-gray-100 text-gray-600'}`}
+                      >
                         {call.callOutcome}
                       </span>
                     </td>
-                    <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">{call.duration}s</td>
-                    <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600 whitespace-nowrap">{call.timeStamp}</td>
+                    <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">
+                      {call.duration}s
+                    </td>
+                    <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600 whitespace-nowrap">
+                      {call.timeStamp}
+                    </td>
                   </tr>
                 ))}
               </tbody>

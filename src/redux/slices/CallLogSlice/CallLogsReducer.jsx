@@ -9,10 +9,10 @@ export const fetchCallLogs = createAsyncThunk(
     try {
       const state = getState()
       const token = state.auth.token
-      
+
       const response = await axios.get(`${API_BASE_URL}/CallLog/GetAllCallLogs`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       return response.data
@@ -28,13 +28,51 @@ export const fetchCallLogById = createAsyncThunk(
     try {
       const state = getState()
       const token = state.auth.token
-      
+
       const response = await axios.get(`${API_BASE_URL}/CallLog/GetCallLogById/${callId}`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       return response.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message)
+    }
+  }
+)
+
+export const fetchConversationDataById = createAsyncThunk(
+  'callLogs/consversation',
+  async (id, { rejectWithValue, getState }) => {
+    try {
+      const state = getState()
+      const token = state.auth.token
+      const response = await axios.get(`${API_BASE_URL}/GetConversationData/GetDataById/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message)
+    }
+  }
+)
+
+export const fetchAudioById = createAsyncThunk(
+  'callLogs/fetchAudio',
+  async (id, { rejectWithValue, getState }) => {
+    try {
+      const state = getState()
+      const token = state.auth.token
+      const response = await axios.get(`${API_BASE_URL}/GetConversationData/GetAudioById/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: 'blob',
+      })
+      const audioUrl = URL.createObjectURL(response.data)
+      return audioUrl
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message)
     }
@@ -48,6 +86,12 @@ const initialState = {
   detailLoading: false,
   error: null,
   detailError: null,
+  conversationData: null,
+  conversationLoading: false,
+  conversationError: null,
+  audioUrl: null,
+  audioLoading: false,
+  audioError: null,
 }
 
 const callLogsSlice = createSlice({
@@ -76,8 +120,8 @@ const callLogsSlice = createSlice({
         const items = Array.isArray(payload)
           ? payload
           : Array.isArray(payload?.data)
-          ? payload.data
-          : []
+            ? payload.data
+            : []
         state.callLogs = items
         state.error = null
       })
@@ -97,6 +141,30 @@ const callLogsSlice = createSlice({
       .addCase(fetchCallLogById.rejected, (state, action) => {
         state.detailLoading = false
         state.detailError = action.payload
+      })
+      .addCase(fetchConversationDataById.pending, (state) => {
+        state.conversationLoading = true
+        state.conversationError = null
+      })
+      .addCase(fetchConversationDataById.fulfilled, (state, action) => {
+        state.conversationLoading = false
+        state.conversationData = action.payload
+      })
+      .addCase(fetchConversationDataById.rejected, (state, action) => {
+        state.conversationLoading = false
+        state.conversationError = action.payload
+      })
+      .addCase(fetchAudioById.pending, (state) => {
+        state.audioLoading = true
+        state.audioError = null
+      })
+      .addCase(fetchAudioById.fulfilled, (state, action) => {
+        state.audioLoading = false
+        state.audioUrl = action.payload
+      })
+      .addCase(fetchAudioById.rejected, (state, action) => {
+        state.audioLoading = false
+        state.audioError = action.payload
       })
   },
 })
