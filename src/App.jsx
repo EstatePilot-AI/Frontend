@@ -11,6 +11,7 @@ import CallLogs from './pages/calllogs/CallLogs'
 import Settings from './pages/settings/Settings'
 import { getUser } from './redux/slices/UserSlice/UserReducer'
 import { logout } from './redux/slices/AuthSlice/authReducer'
+import ConversationDetails from './pages/calllogs/ConversationDetails'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="leads" element={<Leads />} />
           <Route path="calllogs" element={<CallLogs />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="conversation/:id" element={<ConversationDetails />} />
         </Route>
         <Route path="/login" element={<Signin />} />
         <Route path="*" element={<Navigate to="/" replace />} />
