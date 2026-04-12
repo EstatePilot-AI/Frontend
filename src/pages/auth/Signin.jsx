@@ -38,7 +38,7 @@ const Signin = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-sm border border-black w-full max-w-md p-8">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 w-full max-w-md p-8">
 
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-gray-900 mb-2">Welcome back</h1>
@@ -64,7 +64,7 @@ const Signin = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@company.com"
-                className="block w-full pl-10 pr-3 py-3 text-black border border-black rounded-lg outline-none transition-all"
+                className="block w-full pl-10 pr-3 py-3 bg-white text-gray-900 border border-gray-300 rounded-lg outline-none transition-all focus:border-(--color-primary) focus:ring-2 focus:ring-(--color-primary-ring)"
                 required
               />
             </div>
@@ -85,7 +85,7 @@ const Signin = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="block w-full pl-10 pr-10 py-3 border text-black border-black rounded-lg  outline-none transition-all"
+                className="block w-full pl-10 pr-10 py-3 bg-white border text-gray-900 border-gray-300 rounded-lg outline-none transition-all focus:border-(--color-primary) focus:ring-2 focus:ring-(--color-primary-ring)"
                 required
               />
               <button
@@ -118,7 +118,7 @@ const Signin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#6366F1] text-white font-medium py-3 rounded-lg transition-colors duration-200 cursor-pointer hover:bg-[#4F46E5] disabled:opacity-70 disabled:cursor-not-allowed"
+            className="ep-primary-button w-full font-medium py-3 rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>

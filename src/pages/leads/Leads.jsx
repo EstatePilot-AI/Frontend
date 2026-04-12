@@ -54,7 +54,7 @@ const Leads = () => {
 
   if (loading) {
     return (
-      <div className="w-full max-w-[1600px] mx-auto">
+      <div className="w-full max-w-400 mx-auto">
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Leads</h1>
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
@@ -64,7 +64,7 @@ const Leads = () => {
   }
 
   return (
-    <div className="w-full max-w-[1600px] mx-auto">
+    <div className="w-full max-w-400 mx-auto">
       <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Leads</h1>
 
       {error && (
@@ -79,9 +79,9 @@ const Leads = () => {
             <button
               key={id}
               onClick={() => setActiveFilter(id)}
-              className={`min-h-[44px] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors touch-manipulation ${
+              className={`min-h-11 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors touch-manipulation ${
                 activeFilter === id
-                  ? 'bg-[#6366F1] text-white'
+                  ? 'bg-(--color-primary) text-white'
                   : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
               }`}
             >
@@ -89,13 +89,13 @@ const Leads = () => {
             </button>
           ))}
         </div>
-        <div className="w-full sm:w-56 md:w-64 flex-shrink-0">
+        <div className="w-full sm:w-56 md:w-64 shrink-0">
           <input
             type="text"
             placeholder="Search leads..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full min-h-[44px] px-4 py-2.5 border border-gray-200 rounded-lg text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4F39F6] focus:border-transparent"
+            className="w-full min-h-11 px-4 py-2.5 border border-gray-200 rounded-lg text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-(--color-primary) focus:border-transparent"
           />
         </div>
       </div>
@@ -135,7 +135,7 @@ const Leads = () => {
       {/* Desktop: Table */}
       <div className="hidden md:block bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px]">
+          <table className="w-full min-w-200">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
                 <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Buyer Name</th>
