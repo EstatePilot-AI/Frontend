@@ -1,23 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
-
-const API_BASE_URL = import.meta.env.VITE_BASE_URL
+import { leadsService } from '../../../api/services/leadsService'
+import { getErrorMessage } from '../../../common/utils/errorHandler'
 
 export const fetchLeads = createAsyncThunk(
   'leads/fetchLeads',
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const token = state.auth.token
-      
-      const response = await axios.get(`${API_BASE_URL}/LeadRequest/GetAllLeads`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      })
+      const response = await leadsService.getAllLeads()
       return response.data
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message)
+      return rejectWithValue(getErrorMessage(error, 'Failed to fetch leads'))
     }
   }
 )

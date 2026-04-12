@@ -30,7 +30,7 @@ const SideBar = () => {
 
   return (
     <div
-      className={`h-screen bg-white text-gray-200 flex flex-col p-5 shadow-lg transition-width duration-300 ${
+      className={`h-screen bg-(--color-surface) text-(--color-text) flex flex-col p-5 shadow-lg transition-width duration-300 border-r border-(--color-border) ${
         isOpen ? 'w-64' : 'w-20'
       }`}
     >
@@ -38,14 +38,14 @@ const SideBar = () => {
       {isOpen && (
         <div className="flex items-center gap-3 mb-4">
           <img src={logo} alt="Logo" className="w-10 h-10" />
-          <h1 className="text-lg font-bold text-gray-800">EstatePilot CRM</h1>
+          <h1 className="text-lg font-bold text-(--color-text)">EstatePilot CRM</h1>
         </div>
       )}
 
     
       <button
         onClick={toggleSidebar}
-        className="mb-6 text-gray-800 hover:text-gray-600 focus:outline-none"
+        className="mb-6 text-(--color-text) hover:text-(--color-text-muted) focus:outline-none"
       >
         <FaBars size={20} />
       </button>

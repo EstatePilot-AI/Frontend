@@ -5,6 +5,8 @@ import {
   fetchConversationDataById,
   fetchAudioById,
 } from '../../redux/slices/CallLogSlice/CallLogsReducer'
+import Card from '../../components/ui/Card'
+import Badge from '../../components/ui/Badge'
 
 const ConversationDetails = () => {
   const { id } = useParams()
@@ -15,15 +17,15 @@ const ConversationDetails = () => {
 
   useEffect(() => {
     if (id) dispatch(fetchConversationDataById(id))
-  }, [id])
+  }, [dispatch, id])
 
   const data = conversationData?.data?.data
 
   useEffect(() => {
-    if (data?.transcript?.some((msg) => msg.source_medium === 'audio')) {
+    if (id && data?.transcript?.some((msg) => msg.source_medium === 'audio')) {
       dispatch(fetchAudioById(id))
     }
-  }, [data])
+  }, [data, dispatch, id])
 
   if (conversationLoading)
     return (
@@ -71,7 +73,7 @@ const ConversationDetails = () => {
   const audioTurns = transcript?.filter((msg) => msg.source_medium === 'audio')
 
   return (
-    <div className="w-full max-w-[1600px] mx-auto p-6">
+    <div className="w-full max-w-400 mx-auto p-6">
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={() => navigate(-1)}
@@ -102,7 +104,7 @@ const ConversationDetails = () => {
       </div>
 
       {/* Call Cost */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 mb-4">
+      <Card className="p-5 mb-4">
         <p className="text-xs text-gray-500 font-medium mb-3">Call Cost</p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           <div className="bg-gray-50 rounded-lg p-4">
@@ -120,30 +122,30 @@ const ConversationDetails = () => {
             <p className="text-base font-medium text-gray-900">{modelName}</p>
           </div>
         </div>
-      </div>
+      </Card>
 
       {data.evaluation_criteria_results_list?.map((ev) => (
-        <div key={ev.criteria_id} className="bg-white border border-gray-200 rounded-xl p-5 mb-4">
+        <Card key={ev.criteria_id} className="p-5 mb-4">
           <p className="text-xs text-gray-500 font-medium mb-3">Evaluation Result</p>
           <div className="flex items-start gap-3">
-            <span
-              className={`text-xs px-2.5 py-1 rounded-full font-medium shrink-0 ${
+            <Badge
+              className={`shrink-0 ${
                 ev.result === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
               }`}
             >
               {ev.result}
-            </span>
+            </Badge>
             <div>
               <p className="text-sm font-medium text-gray-900 mb-1">{ev.criteria_id}</p>
               <p className="text-sm text-gray-500 leading-relaxed">{ev.rationale}</p>
             </div>
           </div>
-        </div>
+        </Card>
       ))}
 
       {/* Collected Data */}
       {collectedData?.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-xl p-5 mb-4">
+        <Card className="p-5 mb-4">
           <p className="text-xs text-gray-500 font-medium mb-3">Collected Data</p>
           <div className="flex flex-wrap gap-2">
             {collectedData.map((item) => (
@@ -153,10 +155,10 @@ const ConversationDetails = () => {
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
-      <div className="bg-white border border-gray-200 rounded-xl p-5 mb-4">
+      <Card className="p-5 mb-4">
         <p className="text-xs text-gray-500 font-medium mb-3">Dynamic Variables</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
           {Object.entries(vars || {})
@@ -167,16 +169,16 @@ const ConversationDetails = () => {
                 className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0"
               >
                 <span className="text-xs text-gray-500 shrink-0 mr-4">{key}</span>
-                <span className="text-xs font-medium text-gray-900 max-w-[200px] truncate text-right">
+                <span className="text-xs font-medium text-gray-900 max-w-50 truncate text-right">
                   {value === null ? '—' : String(value)}
                 </span>
               </div>
             ))}
         </div>
-      </div>
+      </Card>
 
       {agentMeta && (
-        <div className="bg-white border border-gray-200 rounded-xl p-5 mb-4">
+        <Card className="p-5 mb-4">
           <p className="text-xs text-gray-500 font-medium mb-3">Agent Metadata</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
             {Object.entries(agentMeta).map(([key, value]) => (
@@ -185,17 +187,17 @@ const ConversationDetails = () => {
                 className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0"
               >
                 <span className="text-xs text-gray-500 shrink-0 mr-4">{key}</span>
-                <span className="text-xs font-medium text-gray-900 max-w-[200px] truncate text-right">
+                <span className="text-xs font-medium text-gray-900 max-w-50 truncate text-right">
                   {value === null ? '—' : String(value)}
                 </span>
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
       {audioTurns?.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-xl p-5 mb-4">
+        <Card className="p-5 mb-4">
           <p className="text-xs text-gray-500 font-medium mb-3">Audio Turns</p>
           <div className="flex flex-col gap-2">
             {audioTurns.map((msg, i) => (
@@ -205,9 +207,7 @@ const ConversationDetails = () => {
               >
                 <p className="text-sm text-gray-900 flex-1 mr-4">{msg.message}</p>
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                    audio
-                  </span>
+                  <Badge className="bg-blue-100 text-blue-700 px-2 py-0.5">audio</Badge>
                   <span className="text-xs text-gray-400">{msg.time_in_call_secs}s</span>
                   {msg.conversation_turn_metrics?.convai_asr_provider && (
                     <span className="text-xs text-gray-400">
@@ -218,11 +218,11 @@ const ConversationDetails = () => {
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
       {(audioUrl || audioLoading) && (
-        <div className="bg-white border border-gray-200 rounded-xl p-5 mb-4">
+        <Card className="p-5 mb-4">
           <p className="text-xs text-gray-500 font-medium mb-3">Call Recording</p>
           {audioLoading ? (
             <div className="flex justify-center items-center h-12">
@@ -233,10 +233,10 @@ const ConversationDetails = () => {
               <source src={audioUrl} />
             </audio>
           )}
-        </div>
+        </Card>
       )}
 
-      <div className="bg-white border border-gray-200 rounded-xl p-5">
+      <Card className="p-5">
         <p className="text-xs text-gray-500 font-medium mb-4">Transcript</p>
         <div className="flex flex-col gap-4">
           {transcript?.map((msg, i) => {
@@ -260,14 +260,10 @@ const ConversationDetails = () => {
                       {msg.time_in_call_secs}s
                     </p>
                     {msg.interrupted && (
-                      <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">
-                        interrupted
-                      </span>
+                      <Badge className="bg-yellow-100 text-yellow-700 px-2 py-0.5">interrupted</Badge>
                     )}
                     {msg.source_medium === 'audio' && (
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                        audio
-                      </span>
+                      <Badge className="bg-blue-100 text-blue-700 px-2 py-0.5">audio</Badge>
                     )}
                   </div>
                   <div
@@ -284,7 +280,7 @@ const ConversationDetails = () => {
             )
           })}
         </div>
-      </div>
+      </Card>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { fetchCallLogs } from '../../redux/slices/CallLogSlice/CallLogsReducer'
 import { fetchLeads } from '../../redux/slices/LeadsSclice/LeadesReducer'
 import { IoCallOutline } from 'react-icons/io5'
 import { TbUsers } from 'react-icons/tb'
+import Card from '../../components/ui/Card'
 
 const DashBoard = () => {
   const dispatch = useDispatch()
@@ -25,7 +26,7 @@ const DashBoard = () => {
   
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition">
+        <Card className="p-6" hover>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 text-sm font-medium mb-2">Total Call Logs</p>
@@ -41,10 +42,10 @@ const DashBoard = () => {
               <IoCallOutline size={32} className="text-blue-600" />
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* Leads Card */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition">
+        <Card className="p-6" hover>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 text-sm font-medium mb-2">Total Leads</p>
@@ -60,11 +61,11 @@ const DashBoard = () => {
               <TbUsers size={32} className="text-green-600" />
             </div>
           </div>
-        </div>
+        </Card>
       </div>
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+      <Card className="p-6">
         <p className="text-gray-600">Welcome to your dashboard.</p>
-      </div>
+      </Card>
     </div>
   )
 }
