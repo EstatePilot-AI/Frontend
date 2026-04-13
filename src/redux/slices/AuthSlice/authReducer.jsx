@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
-
-const BASE_URL = import.meta.env.VITE_BASE_URL
+import { authService } from '../../../api/services/authService'
+import { getErrorMessage } from '../../../common/utils/errorHandler'
 
 const AUTH_TOKEN_KEY = 'authToken'
 const AUTH_USER_KEY = 'authUser'
@@ -13,6 +12,7 @@ const getStoredAuth = () => {
     const user = userStr ? JSON.parse(userStr) : null
     return { token, user, isAuthenticated: !!token }
   } catch {
+    void 0
     return { token: null, user: null, isAuthenticated: false }
   }
 }
@@ -31,17 +31,10 @@ export const login = createAsyncThunk(
   'auth/login',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`${BASE_URL}/Account/Login`, {
-        email,
-        password,
-      })
+      const { data } = await authService.login({ email, password })
       return data
     } catch (err) {
-      const message =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        err.message ||
-        'Login failed'
+      const message = getErrorMessage(err, 'Login failed')
       return rejectWithValue(message)
     }
   }
@@ -53,11 +46,9 @@ export const logoutApi = createAsyncThunk(
     const authToken = token ?? getState().auth.token
     if (!authToken) return
     try {
-      await axios.post(`${BASE_URL}/Account/Logout`, null, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      })
+      await authService.logout(authToken)
     } catch {
-     
+      void 0
     }
   }
 )
@@ -82,7 +73,9 @@ const authSlice = createSlice({
       try {
         localStorage.removeItem(AUTH_TOKEN_KEY)
         localStorage.removeItem(AUTH_USER_KEY)
-      } catch {}
+      } catch {
+        void 0
+      }
     },
     clearError: (state) => {
       state.error = null
@@ -106,7 +99,9 @@ const authSlice = createSlice({
             if (state.user != null) {
               localStorage.setItem(AUTH_USER_KEY, JSON.stringify(state.user))
             }
-          } catch {}
+          } catch {
+            void 0
+          }
         }
       })
       .addCase(login.rejected, (state, action) => {
@@ -121,7 +116,9 @@ const authSlice = createSlice({
         try {
           localStorage.removeItem(AUTH_TOKEN_KEY)
           localStorage.removeItem(AUTH_USER_KEY)
-        } catch {}
+        } catch {
+          void 0
+        }
       })
       .addCase(logoutApi.fulfilled, (state) => {
         state.user = null
@@ -131,7 +128,9 @@ const authSlice = createSlice({
         try {
           localStorage.removeItem(AUTH_TOKEN_KEY)
           localStorage.removeItem(AUTH_USER_KEY)
-        } catch {}
+        } catch {
+          void 0
+        }
       })
       .addCase(logoutApi.rejected, (state) => {
         state.user = null
@@ -141,7 +140,9 @@ const authSlice = createSlice({
         try {
           localStorage.removeItem(AUTH_TOKEN_KEY)
           localStorage.removeItem(AUTH_USER_KEY)
-        } catch {}
+        } catch {
+          void 0
+        }
       })
   },
 })

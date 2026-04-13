@@ -1,80 +1,52 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
-
-const API_BASE_URL = import.meta.env.VITE_BASE_URL
+import { callLogsService } from '../../../api/services/callLogsService'
+import { getErrorMessage } from '../../../common/utils/errorHandler'
 
 export const fetchCallLogs = createAsyncThunk(
   'callLogs/fetchCallLogs',
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const token = state.auth.token
-
-      const response = await axios.get(`${API_BASE_URL}/CallLog/GetAllCallLogs`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await callLogsService.getAllCallLogs()
       return response.data
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message)
+      return rejectWithValue(getErrorMessage(error, 'Failed to fetch call logs'))
     }
   }
 )
 
 export const fetchCallLogById = createAsyncThunk(
   'callLogs/fetchCallLogById',
-  async (callId, { rejectWithValue, getState }) => {
+  async (callId, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const token = state.auth.token
-
-      const response = await axios.get(`${API_BASE_URL}/CallLog/GetCallLogById/${callId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await callLogsService.getCallLogById(callId)
       return response.data
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message)
+      return rejectWithValue(getErrorMessage(error, 'Failed to fetch call log details'))
     }
   }
 )
 
 export const fetchConversationDataById = createAsyncThunk(
   'callLogs/consversation',
-  async (id, { rejectWithValue, getState }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const token = state.auth.token
-      const response = await axios.get(`${API_BASE_URL}/GetConversationData/GetDataById/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await callLogsService.getConversationDataById(id)
       return response.data
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message)
+      return rejectWithValue(getErrorMessage(error, 'Failed to fetch conversation data'))
     }
   }
 )
 
 export const fetchAudioById = createAsyncThunk(
   'callLogs/fetchAudio',
-  async (id, { rejectWithValue, getState }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const token = state.auth.token
-      const response = await axios.get(`${API_BASE_URL}/GetConversationData/GetAudioById/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: 'blob',
-      })
+      const response = await callLogsService.getAudioById(id)
       const audioUrl = URL.createObjectURL(response.data)
       return audioUrl
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message)
+      return rejectWithValue(getErrorMessage(error, 'Failed to fetch conversation audio'))
     }
   }
 )

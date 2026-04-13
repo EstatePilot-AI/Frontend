@@ -1,16 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
-
-const API_BASE_URL = import.meta.env.VITE_BASE_URL
+import { userService } from '../../../api/services/userService'
+import { getErrorMessage } from '../../../common/utils/errorHandler'
 
 export const getUser = createAsyncThunk(
   'user/getUser',
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const token = getState().auth?.token
-      const { data } = await axios.get(`${API_BASE_URL}/Account/GetMyProfile`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      })
+      const { data } = await userService.getUserProfile()
       return {
         id: data?.id ?? '',
         name: data?.name ?? '',
@@ -19,11 +15,7 @@ export const getUser = createAsyncThunk(
         role: data?.role ?? '',
       }
     } catch (err) {
-      const message =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        err.message ||
-        'Failed to fetch profile'
+      const message = getErrorMessage(err, 'Failed to fetch profile')
       return rejectWithValue(message)
     }
   }
@@ -31,21 +23,12 @@ export const getUser = createAsyncThunk(
 
 export const changePassword = createAsyncThunk(
   'user/changePassword',
-  async ({ currentPassword, newPassword }, { getState, rejectWithValue }) => {
+  async ({ currentPassword, newPassword }, { rejectWithValue }) => {
     try {
-      const token = getState().auth?.token
-      const { data } = await axios.put(
-        `${API_BASE_URL}/Account/ChangePassword`,
-        { currentPassword, newPassword },
-        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
-      )
+      const { data } = await userService.changePassword({ currentPassword, newPassword })
       return data
     } catch (err) {
-      const message =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        err.message ||
-        'Failed to change password'
+      const message = getErrorMessage(err, 'Failed to change password')
       return rejectWithValue(message)
     }
   }
@@ -55,14 +38,10 @@ export const forgetPassword = createAsyncThunk(
   'user/forgetPassword',
   async ({ email }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`${API_BASE_URL}/Account/ForgetPassword`, { email })
+      const { data } = await userService.forgetPassword({ email })
       return data
     } catch (err) {
-      const message =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        err.message ||
-        'Failed to send reset email'
+      const message = getErrorMessage(err, 'Failed to send reset email')
       return rejectWithValue(message)
     }
   }
@@ -72,18 +51,10 @@ export const resetPassword = createAsyncThunk(
   'user/resetPassword',
   async ({ email, token, newPassword }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`${API_BASE_URL}/Account/ResetPassword`, {
-        email,
-        token,
-        newPassword,
-      })
+      const { data } = await userService.resetPassword({ email, token, newPassword })
       return data
     } catch (err) {
-      const message =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        err.message ||
-        'Failed to reset password'
+      const message = getErrorMessage(err, 'Failed to reset password')
       return rejectWithValue(message)
     }
   }
@@ -91,21 +62,12 @@ export const resetPassword = createAsyncThunk(
 
 export const createNewUser = createAsyncThunk(
   'user/createNewUser',
-  async ({ personName, email, phoneNumber, role, password }, { getState, rejectWithValue }) => {
+  async ({ personName, email, phoneNumber, role, password }, { rejectWithValue }) => {
     try {
-      const token = getState().auth?.token
-      const { data } = await axios.post(
-        `${API_BASE_URL}/Account/CreateNewUser`,
-        { personName, email, phoneNumber, role, password },
-        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
-      )
+      const { data } = await userService.createNewUser({ personName, email, phoneNumber, role, password })
       return data
     } catch (err) {
-      const message =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        err.message ||
-        'Failed to create user'
+      const message = getErrorMessage(err, 'Failed to create user')
       return rejectWithValue(message)
     }
   }
