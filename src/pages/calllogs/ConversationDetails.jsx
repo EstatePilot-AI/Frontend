@@ -82,7 +82,6 @@ const ConversationDetails = () => {
         <h1 className="text-xl font-semibold text-gray-900">Conversation Details</h1>
       </div>
 
-      {/* Info Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         {[
           { label: 'Lead Name', value: vars?.['leadInfo__name'] },
@@ -141,7 +140,6 @@ const ConversationDetails = () => {
         </div>
       ))}
 
-      {/* Collected Data */}
       {collectedData?.length > 0 && (
         <div className="bg-white border border-gray-200 rounded-xl p-5 mb-4">
           <p className="text-xs text-gray-500 font-medium mb-3">Collected Data</p>
