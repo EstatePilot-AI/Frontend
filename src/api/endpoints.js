@@ -21,4 +21,7 @@ export const ENDPOINTS = {
     GET_DATA_BY_ID: '/GetConversationData/GetDataById',
     GET_AUDIO_BY_ID: '/GetConversationData/GetAudioById',
   },
+  DEALS: {
+    GET_ALL: '/Deals/GetAllDeals',
+  },
 }

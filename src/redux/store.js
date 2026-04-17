@@ -3,6 +3,7 @@ import authReducer from './slices/AuthSlice/authReducer'
 import callLogsReducer from './slices/CallLogSlice/CallLogsReducer'
 import leadsReducer from './slices/LeadsSclice/LeadesReducer'
 import userReducer from './slices/UserSlice/UserReducer'
+import dealsReducer from './slices/DealsSlice/DealsRducer'
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     callLogs: callLogsReducer,
     leads: leadsReducer,
     user: userReducer,
+    deals: dealsReducer,
   },
 })

@@ -6,6 +6,7 @@ import { FiMoon, FiSun } from 'react-icons/fi'
 import Layout from './pages/home/Layout'
 import DashBoard from './pages/home/DashBoard'
 import Leads from './pages/leads/Leads'
+import Deals from './pages/deals/Deals'
 import Signin from './pages/auth/Signin'
 import ProtectedRoute from './components/ProtectedRoute'
 import CallLogs from './pages/calllogs/CallLogs'
@@ -74,6 +75,7 @@ const App = () => {
         >
           <Route index element={<DashBoard />} />
           <Route path="leads" element={<Leads />} />
+          <Route path="deals" element={<Deals />} />
           <Route path="calllogs" element={<CallLogs />} />
           <Route path="settings" element={<Settings />} />
           <Route path="conversation/:id" element={<ConversationDetails />} />
