@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { FiMoon, FiSun } from 'react-icons/fi'
 import Layout from './pages/home/Layout'
 import DashBoard from './pages/home/DashBoard'
 import Leads from './pages/leads/Leads'
@@ -11,6 +10,10 @@ import Signin from './pages/auth/Signin'
 import ProtectedRoute from './components/ProtectedRoute'
 import CallLogs from './pages/calllogs/CallLogs'
 import Settings from './pages/settings/Settings'
+import Properties from './pages/properties/Properties'
+import Clients from './pages/clients/Clients'
+import Requests from './pages/requests/Requests'
+import Tasks from './pages/tasks/Tasks'
 import { getUser } from './redux/slices/UserSlice/UserReducer'
 import { logout } from './redux/slices/AuthSlice/authReducer'
 import ConversationDetails from './pages/calllogs/ConversationDetails'
@@ -52,24 +55,24 @@ const App = () => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={toggleTheme}
-        className="ep-theme-toggle fixed top-4 right-4 z-1000 flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition-colors hover:bg-(--color-primary-soft)"
-        aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-        title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-      >
-        {theme === 'dark' ? <FiSun size={16} /> : <FiMoon size={16} />}
-        <span className="hidden sm:inline">{theme === 'dark' ? 'Light' : 'Dark'}</span>
-      </button>
-
-      <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: 'var(--color-surface)',
+            color: 'var(--color-text)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius-md)',
+          },
+        }}
+      />
       <Routes>
         <Route
           path="/"
           element={
             <ProtectedRoute>
-              <Layout />
+              <Layout theme={theme} onToggleTheme={toggleTheme} />
             </ProtectedRoute>
           }
         >
@@ -79,6 +82,10 @@ const App = () => {
           <Route path="calllogs" element={<CallLogs />} />
           <Route path="settings" element={<Settings />} />
           <Route path="conversation/:id" element={<ConversationDetails />} />
+          <Route path="properties" element={<Properties />} />
+          <Route path="clients" element={<Clients />} />
+          <Route path="requests" element={<Requests />} />
+          <Route path="tasks" element={<Tasks />} />
         </Route>
         <Route path="/login" element={<Signin />} />
         <Route path="*" element={<Navigate to="/" replace />} />

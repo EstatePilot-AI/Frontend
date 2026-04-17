@@ -4,6 +4,7 @@ import callLogsReducer from './slices/CallLogSlice/CallLogsReducer'
 import leadsReducer from './slices/LeadsSclice/LeadesReducer'
 import userReducer from './slices/UserSlice/UserReducer'
 import dealsReducer from './slices/DealsSlice/DealsRducer'
+import dashboardReducer from './slices/DashboardSlice/dashboardReducer'
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     leads: leadsReducer,
     user: userReducer,
     deals: dealsReducer,
+    dashboard: dashboardReducer,
   },
 })

@@ -1,11 +1,12 @@
 import React from 'react'
 
 const toneClasses = {
-  neutral: 'bg-gray-100 text-gray-600',
-  info: 'bg-blue-100 text-blue-700',
-  success: 'bg-green-100 text-green-700',
-  warning: 'bg-yellow-100 text-yellow-700',
-  danger: 'bg-red-100 text-red-700',
+  neutral: 'bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)]',
+  info: 'bg-[var(--color-info-soft)] text-[var(--color-info)]',
+  success: 'bg-[var(--color-success-soft)] text-[var(--color-success)]',
+  warning: 'bg-[var(--color-warning-soft)] text-[var(--color-warning)]',
+  danger: 'bg-[var(--color-danger-soft)] text-[var(--color-danger)]',
+  emerald: 'bg-[var(--color-emerald-50)] text-[var(--color-emerald-700)]',
 }
 
 const Badge = ({
@@ -16,7 +17,7 @@ const Badge = ({
 }) => {
   return (
     <span
-      className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${toneClasses[tone] || toneClasses.neutral} ${className}`.trim()}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-[var(--radius-full)] text-xs font-medium whitespace-nowrap ${toneClasses[tone] || toneClasses.neutral} ${className}`.trim()}
       {...props}
     >
       {children}

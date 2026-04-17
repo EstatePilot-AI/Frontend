@@ -1,14 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import SideBar from './components/Sidebar'
+import Topbar from './components/Topbar'
 
-const Layout = () => {
+const Layout = ({ theme, onToggleTheme }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <SideBar />
-      <main className="flex-1 p-4 sm:p-6 overflow-auto min-w-0">
-        <Outlet />
-      </main>
+    <div className="ep-layout">
+      <SideBar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="ep-main-area">
+        <Topbar
+          theme={theme}
+          onToggleTheme={onToggleTheme}
+          onMenuToggle={() => setSidebarOpen(true)}
+        />
+        <div className="ep-content">
+          <Outlet />
+        </div>
+      </div>
     </div>
   )
 }
