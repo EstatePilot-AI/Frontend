@@ -26,7 +26,10 @@ const Signin = () => {
 
   useEffect(() => {
     if (error) {
-      const customError = error.includes('400') || error.includes('validation') || error.includes('Invalid') ? 'Invalid email or password' : error
+      const customError =
+        error.includes('400') || error.includes('validation') || error.includes('Invalid')
+          ? 'Invalid email or password'
+          : error
       toast.error(customError)
     }
     return () => dispatch(clearError())
@@ -38,18 +41,30 @@ const Signin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 w-full max-w-md p-8">
+    <div className="min-h-screen bg-[var(--color-background)] flex items-center justify-center p-4">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-[var(--color-primary)] opacity-5 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-[var(--color-accent)] opacity-5 blur-3xl" />
+      </div>
 
+      <div className="relative bg-[var(--color-surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-lg)] border border-[var(--color-border)] w-full max-w-md p-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-2">Welcome back</h1>
-          <p className="text-gray-600 text-sm">Sign in to your account to continue</p>
+          <div className="flex items-center gap-2.5 mb-6">
+            <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[var(--color-primary)] flex items-center justify-center">
+              <span className="text-white text-sm font-bold">E</span>
+            </div>
+            <span className="text-lg font-bold text-[var(--color-text)]">EstatePilot</span>
+          </div>
+          <h1 className="text-2xl font-bold text-[var(--color-text)] mb-2">Welcome back</h1>
+          <p className="text-sm text-[var(--color-text-muted)]">Sign in to your account to continue</p>
         </div>
+
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div className="mb-4 p-3 rounded-[var(--radius-md)] bg-[var(--color-danger-soft)] border border-[var(--color-danger)] text-[var(--color-danger)] text-sm">
             {error}
           </div>
         )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <Input
             id="email"
@@ -59,11 +74,10 @@ const Signin = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
             required
-            leftElement={<MdEmail className="h-5 w-5 text-gray-400 ml-3" />}
-            inputClassName="py-3 rounded-lg"
+            leftElement={<MdEmail className="h-5 w-5 text-[var(--color-text-muted)] ml-3" />}
+            inputClassName="py-3"
           />
 
-         
           <Input
             id="password"
             label="Password"
@@ -72,7 +86,7 @@ const Signin = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
             required
-            leftElement={<MdLock className="h-5 w-5 text-gray-400 ml-3" />}
+            leftElement={<MdLock className="h-5 w-5 text-[var(--color-text-muted)] ml-3" />}
             rightElement={
               <button
                 type="button"
@@ -80,40 +94,26 @@ const Signin = () => {
                 className="pr-3 flex items-center"
               >
                 {showPassword ? (
-                  <AiOutlineEyeInvisible className="h-5 w-5 text-gray-400" />
+                  <AiOutlineEyeInvisible className="h-5 w-5 text-[var(--color-text-muted)]" />
                 ) : (
-                  <AiOutlineEye className="h-5 w-5 text-gray-400" />
+                  <AiOutlineEye className="h-5 w-5 text-[var(--color-text-muted)]" />
                 )}
               </button>
             }
-            inputClassName="py-3 rounded-lg"
+            inputClassName="py-3"
           />
-          {/* <div className="flex items-center justify-between">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4  text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <span className="ml-2 text-sm text-gray-700">Remember me</span>
-            </label>
-            <a href="#" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-              Forgot password?
-            </a>
-          </div> */}
+
           <Button
             type="submit"
             disabled={loading}
             fullWidth
-            className="py-3 rounded-lg"
+            className="py-3"
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>
 
-        
-        <p className="mt-8 text-center text-xs text-gray-500">
+        <p className="mt-8 text-center text-xs text-[var(--color-text-muted)]">
           Protected by enterprise-grade security
         </p>
       </div>

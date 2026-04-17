@@ -5,6 +5,9 @@ import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
+import Skeleton, { SkeletonRow } from '../../components/ui/Skeleton'
+import EmptyState from '../../components/ui/EmptyState'
+import { FiSearch, FiBriefcase } from 'react-icons/fi'
 
 const STATUS_FILTERS = [
   { id: 'all', label: 'All' },
@@ -13,10 +16,10 @@ const STATUS_FILTERS = [
   { id: 'canceled', label: 'Canceled' },
 ]
 
-const statusStyles = {
-  'In Progress': 'bg-sky-100 text-sky-800',
-  Completed: 'bg-emerald-100 text-emerald-800',
-  Canceled: 'bg-red-100 text-red-800',
+const statusToneMap = {
+  'In Progress': 'info',
+  Completed: 'success',
+  Canceled: 'danger',
 }
 
 const Deals = () => {
@@ -56,7 +59,6 @@ const Deals = () => {
   }, [deals, activeFilter, search])
 
   const totalPages = Math.max(1, Math.ceil(filteredDeals.length / ITEMS_PER_PAGE))
-
   const safeCurrentPage = Math.min(currentPage, totalPages)
 
   const paginatedDeals = useMemo(() => {
@@ -65,245 +67,164 @@ const Deals = () => {
   }, [filteredDeals, safeCurrentPage])
 
   const visiblePageNumbers = useMemo(() => {
-    if (totalPages <= 7) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1)
-    }
-
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1)
     const pages = [1]
     const start = Math.max(2, safeCurrentPage - 1)
     const end = Math.min(totalPages - 1, safeCurrentPage + 1)
-
     if (start > 2) pages.push('start-ellipsis')
-
-    for (let i = start; i <= end; i += 1) {
-      pages.push(i)
-    }
-
+    for (let i = start; i <= end; i += 1) pages.push(i)
     if (end < totalPages - 1) pages.push('end-ellipsis')
-
     pages.push(totalPages)
     return pages
   }, [safeCurrentPage, totalPages])
 
-  if (loading) {
-    return (
-      <div className="w-full max-w-400 mx-auto">
-        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Deals</h1>
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="w-full max-w-400 mx-auto">
-      <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Deals</h1>
+    <>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-[var(--color-text)]">Deals</h1>
+        <p className="text-sm text-[var(--color-text-muted)] mt-1">Track and manage property deals</p>
+      </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)] text-[var(--color-danger)] px-4 py-3 rounded-[var(--radius-md)] mb-6 text-sm">
           {error}
         </div>
       )}
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 mb-4 sm:mb-6">
-        <div className="flex flex-wrap gap-2">
-          {STATUS_FILTERS.map(({ id, label }) => (
-            <Button
-              key={id}
-              onClick={() => {
-                setActiveFilter(id)
-                setCurrentPage(1)
-              }}
-              variant={activeFilter === id ? 'primary' : 'secondary'}
-              className="min-h-11 px-4 rounded-lg touch-manipulation"
-            >
-              {label}
-            </Button>
-          ))}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 mb-6">
+          <div className="flex flex-wrap gap-2">
+            {STATUS_FILTERS.map(({ id, label }) => (
+              <Button
+                key={id}
+                onClick={() => { setActiveFilter(id); setCurrentPage(1) }}
+                variant={activeFilter === id ? 'primary' : 'secondary'}
+                size="sm"
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
+          <div className="w-full sm:w-64 shrink-0">
+            <Input
+              type="text"
+              placeholder="Search buyer, seller, agent..."
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1) }}
+              leftElement={<FiSearch size={16} className="text-[var(--color-text-muted)] ml-3" />}
+              inputClassName="min-h-9 text-sm"
+            />
+          </div>
         </div>
-        <div className="w-full sm:w-56 md:w-64 shrink-0">
-          <Input
-            type="text"
-            placeholder="Search buyer, seller, agent..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value)
-              setCurrentPage(1)
-            }}
-            inputClassName="min-h-11 text-sm sm:text-base"
-          />
-        </div>
-      </div>
 
-      <div className="md:hidden space-y-4">
-        {filteredDeals.length === 0 ? (
-          <Card className="py-12 text-center text-gray-500 text-sm">
-            No deals match your filters.
+        {loading ? (
+          <Card className="overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-[var(--color-border)]">
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Deal ID</th>
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer</th>
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Seller</th>
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Agent</th>
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Amount</th>
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Date</th>
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <SkeletonRow key={i} cells={7} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        ) : filteredDeals.length === 0 ? (
+          <Card>
+            <EmptyState
+              icon={FiBriefcase}
+              title="No deals found"
+              description="No deals match your current filters. Try adjusting your search."
+            />
           </Card>
         ) : (
-          paginatedDeals.map((deal) => (
-            <Card key={deal.dealId || Math.random()} className="p-4 space-y-3">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div>
-                  <p className="text-sm font-semibold text-gray-900 leading-snug">
-                    Buyer: {deal.buyer}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-0.5">Seller: {deal.seller}</p>
-                </div>
-                <Badge
-                  className={`shrink-0 ${statusStyles[deal.dealStatus] || 'bg-gray-100 text-gray-600'}`}
-                >
-                  {deal.dealStatus || 'N/A'}
-                </Badge>
-              </div>
-
-              <div className="pt-2 border-t border-gray-100">
-                <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-                  <div>
-                    <dt className="text-gray-500 text-xs uppercase tracking-wider">Amount</dt>
-                    <dd className="text-gray-900 mt-0.5 font-medium">
-                      EGP {deal.finalSaleAmount?.toLocaleString()}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-gray-500 text-xs uppercase tracking-wider">Agent</dt>
-                    <dd className="text-gray-900 mt-0.5">{deal.agent}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-gray-500 text-xs uppercase tracking-wider">Deal Date</dt>
-                    <dd className="text-gray-900 mt-0.5">{deal.dealDate}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-gray-500 text-xs uppercase tracking-wider">
-                      Meeting Status
-                    </dt>
-                    <dd className="text-gray-900 mt-0.5">{deal.meetingStatus}</dd>
-                  </div>
-                </dl>
+          <>
+            <Card className="hidden md:block overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-muted)]">
+                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Deal ID</th>
+                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer</th>
+                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Seller</th>
+                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Agent</th>
+                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Amount</th>
+                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Date</th>
+                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedDeals.map((deal, idx) => (
+                      <tr key={deal.dealId ?? `deal-${idx}`} className="border-b border-[var(--color-border-subtle)] last:border-b-0 hover:bg-[var(--color-surface-muted)] transition-colors">
+                        <td className="py-3 px-5 text-sm text-[var(--color-text-muted)]">#{deal.dealId}</td>
+                        <td className="py-3 px-5 text-sm font-medium text-[var(--color-text)]">{deal.buyer}</td>
+                        <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{deal.seller}</td>
+                        <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{deal.agent}</td>
+                        <td className="py-3 px-5 text-sm font-medium text-[var(--color-text)]">EGP {deal.finalSaleAmount?.toLocaleString()}</td>
+                        <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{deal.dealDate}</td>
+                        <td className="py-3 px-5"><Badge tone={statusToneMap[deal.dealStatus] || 'neutral'}>{deal.dealStatus || 'N/A'}</Badge></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </Card>
-          ))
-        )}
-      </div>
 
-      <Card className="hidden md:block overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-200">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
-                  Deal ID
-                </th>
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
-                  Buyer
-                </th>
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
-                  Seller
-                </th>
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
-                  Agent
-                </th>
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
-                  Amount
-                </th>
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
-                  Date
-                </th>
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedDeals.map((deal) => (
-                <tr
-                  key={deal.dealId || Math.random()}
-                  className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50/50 transition-colors"
-                >
-                  <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">
-                    #{deal.dealId}
-                  </td>
-                  <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-900 font-medium">
-                    {deal.buyer}
-                  </td>
-                  <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">{deal.seller}</td>
-                  <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">{deal.agent}</td>
-                  <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm font-medium text-gray-900">
-                    EGP {deal.finalSaleAmount?.toLocaleString()}
-                  </td>
-                  <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">
-                    {deal.dealDate}
-                  </td>
-                  <td className="py-3 px-3 lg:py-4 lg:px-5">
-                    <Badge className={statusStyles[deal.dealStatus] || 'bg-gray-100 text-gray-600'}>
-                      {deal.dealStatus || 'N/A'}
-                    </Badge>
-                  </td>
-                </tr>
+            <div className="md:hidden space-y-3">
+              {paginatedDeals.map((deal, idx) => (
+                <Card key={deal.dealId ?? `deal-card-${idx}`} className="p-4">
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <div>
+                      <p className="text-sm font-semibold text-[var(--color-text)]">Buyer: {deal.buyer}</p>
+                      <p className="text-sm text-[var(--color-text-secondary)] mt-0.5">Seller: {deal.seller}</p>
+                    </div>
+                    <Badge tone={statusToneMap[deal.dealStatus] || 'neutral'}>{deal.dealStatus || 'N/A'}</Badge>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <p className="text-xs text-[var(--color-text-muted)]">Amount</p>
+                      <p className="font-medium text-[var(--color-text)]">EGP {deal.finalSaleAmount?.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-[var(--color-text-muted)]">Agent</p>
+                      <p className="text-[var(--color-text-secondary)]">{deal.agent}</p>
+                    </div>
+                  </div>
+                </Card>
               ))}
-            </tbody>
-          </table>
-        </div>
-        {filteredDeals.length === 0 && (
-          <div className="py-12 text-center text-gray-500 text-sm">
-            No deals match your filters.
-          </div>
+            </div>
+
+            {filteredDeals.length > 0 && (
+              <div className="mt-6 flex flex-col gap-3 items-center">
+                <p className="text-sm text-[var(--color-text-muted)]">
+                  Showing {(safeCurrentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredDeals.length)} of {filteredDeals.length}
+                </p>
+                <div className="flex items-center gap-1">
+                  <Button variant="secondary" size="sm" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={safeCurrentPage === 1}>Prev</Button>
+                  {visiblePageNumbers.map((pn) =>
+                    typeof pn !== 'number' ? (
+                      <span key={pn} className="px-2 text-[var(--color-text-muted)] text-sm">...</span>
+                    ) : (
+                      <Button key={pn} variant={safeCurrentPage === pn ? 'primary' : 'secondary'} size="sm" onClick={() => setCurrentPage(pn)} className="min-w-9">{pn}</Button>
+                    )
+                  )}
+                  <Button variant="secondary" size="sm" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={safeCurrentPage === totalPages}>Next</Button>
+                </div>
+              </div>
+            )}
+          </>
         )}
-      </Card>
-
-      {filteredDeals.length > 0 && (
-        <div className="mt-4 sm:mt-6 flex flex-col gap-3 items-center">
-          <p className="text-sm text-gray-500 text-center">
-            Showing {(safeCurrentPage - 1) * ITEMS_PER_PAGE + 1}
-            {' - '}
-            {Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredDeals.length)} of{' '}
-            {filteredDeals.length}
-          </p>
-
-          <div className="flex items-center justify-center gap-2 flex-wrap w-full">
-            <Button
-              variant="secondary"
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-              disabled={safeCurrentPage === 1}
-              className="px-3 py-2"
-            >
-              Prev
-            </Button>
-
-            {visiblePageNumbers.map((pageNumber) => {
-              if (typeof pageNumber !== 'number') {
-                return (
-                  <span key={pageNumber} className="px-2 text-gray-500">
-                    ...
-                  </span>
-                )
-              }
-
-              return (
-                <Button
-                  key={pageNumber}
-                  variant={safeCurrentPage === pageNumber ? 'primary' : 'secondary'}
-                  onClick={() => setCurrentPage(pageNumber)}
-                  className="min-w-10 px-3 py-2"
-                >
-                  {pageNumber}
-                </Button>
-              )
-            })}
-
-            <Button
-              variant="secondary"
-              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-              disabled={safeCurrentPage === totalPages}
-              className="px-3 py-2"
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
+    </>
   )
 }
 

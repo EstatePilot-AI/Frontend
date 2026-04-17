@@ -5,6 +5,9 @@ import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
+import Skeleton, { SkeletonRow } from '../../components/ui/Skeleton'
+import EmptyState from '../../components/ui/EmptyState'
+import { FiSearch, FiUsers } from 'react-icons/fi'
 
 const STATUS_FILTERS = [
   { id: 'all', label: 'All' },
@@ -15,12 +18,12 @@ const STATUS_FILTERS = [
   { id: 'invalid-number', label: 'Invalid Number' },
 ]
 
-const statusStyles = {
-  Initiated: 'bg-sky-100 text-sky-800',
-  'Not Interested': 'bg-red-100 text-red-800',
-  'Qualified for property': 'bg-emerald-100 text-emerald-800',
-  'Retry Pending': 'bg-violet-100 text-violet-800',
-  'Invalid number': 'bg-gray-100 text-gray-600',
+const statusToneMap = {
+  Initiated: 'info',
+  'Not Interested': 'danger',
+  'Qualified for property': 'success',
+  'Retry Pending': 'warning',
+  'Invalid number': 'neutral',
 }
 
 const Leads = () => {
@@ -60,7 +63,6 @@ const Leads = () => {
   }, [leads, activeFilter, search])
 
   const totalPages = Math.max(1, Math.ceil(filteredLeads.length / ITEMS_PER_PAGE))
-
   const safeCurrentPage = Math.min(currentPage, totalPages)
 
   const paginatedLeads = useMemo(() => {
@@ -69,193 +71,148 @@ const Leads = () => {
   }, [filteredLeads, safeCurrentPage])
 
   const visiblePageNumbers = useMemo(() => {
-    if (totalPages <= 7) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1)
-    }
-
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1)
     const pages = [1]
     const start = Math.max(2, safeCurrentPage - 1)
     const end = Math.min(totalPages - 1, safeCurrentPage + 1)
-
     if (start > 2) pages.push('start-ellipsis')
-
-    for (let i = start; i <= end; i += 1) {
-      pages.push(i)
-    }
-
+    for (let i = start; i <= end; i += 1) pages.push(i)
     if (end < totalPages - 1) pages.push('end-ellipsis')
-
     pages.push(totalPages)
     return pages
   }, [safeCurrentPage, totalPages])
 
-  if (loading) {
-    return (
-      <div className="w-full max-w-400 mx-auto">
-        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Leads</h1>
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="w-full max-w-400 mx-auto">
-      <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Leads</h1>
+    <>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-[var(--color-text)]">Leads</h1>
+        <p className="text-sm text-[var(--color-text-muted)] mt-1">Manage and track your property leads</p>
+      </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)] text-[var(--color-danger)] px-4 py-3 rounded-[var(--radius-md)] mb-6 text-sm">
           {error}
         </div>
       )}
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 mb-4 sm:mb-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 mb-6">
         <div className="flex flex-wrap gap-2">
           {STATUS_FILTERS.map(({ id, label }) => (
             <Button
               key={id}
-              onClick={() => {
-                setActiveFilter(id)
-                setCurrentPage(1)
-              }}
+              onClick={() => { setActiveFilter(id); setCurrentPage(1) }}
               variant={activeFilter === id ? 'primary' : 'secondary'}
-              className="min-h-11 px-4 rounded-lg touch-manipulation"
+              size="sm"
             >
               {label}
             </Button>
           ))}
         </div>
-        <div className="w-full sm:w-56 md:w-64 shrink-0">
+        <div className="w-full sm:w-64 shrink-0">
           <Input
             type="text"
             placeholder="Search leads..."
             value={search}
-            onChange={(e) => {
-              setSearch(e.target.value)
-              setCurrentPage(1)
-            }}
-            inputClassName="min-h-11 text-sm sm:text-base"
+            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1) }}
+            leftElement={<FiSearch size={16} className="text-[var(--color-text-muted)] ml-3" />}
+            inputClassName="min-h-9 text-sm"
           />
         </div>
       </div>
 
-
-      <div className="md:hidden space-y-3">
-        {filteredLeads.length === 0 ? (
-          <Card className="py-12 text-center text-gray-500 text-sm">
-            No leads match your filters.
-          </Card>
-        ) : (
-          paginatedLeads.map((lead) => (
-            <Card
-              key={lead.requestId}
-              className="p-4 space-y-3"
-            >
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">{lead.buyerName}</p>
-                  <p className="text-sm text-gray-600 mt-0.5">{lead.buyerPhone}</p>
-                </div>
-                <Badge className={`shrink-0 ${statusStyles[lead.statusName] || 'bg-gray-100 text-gray-600'}`}>
-                  {lead.statusName}
-                </Badge>
-              </div>
-              <dl className="grid grid-cols-1 gap-2 text-sm">
-                <div>
-                  <dt className="text-gray-500 text-xs uppercase tracking-wider">Request ID</dt>
-                  <dd className="text-gray-900 mt-0.5">{lead.requestId}</dd>
-                </div>
-              </dl>
-            </Card>
-          ))
-        )}
-      </div>
-
-      {/* Desktop: Table */}
-      <Card className="hidden md:block overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-200">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Buyer Name</th>
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Phone Number</th>
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Status</th>
-                <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-3 lg:py-4 lg:px-5">Request ID</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedLeads.map((lead) => (
-                <tr key={lead.requestId} className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50/50 transition-colors">
-                  <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-900 font-medium">{lead.buyerName}</td>
-                  <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">{lead.buyerPhone}</td>
-                  <td className="py-3 px-3 lg:py-4 lg:px-5">
-                    <Badge className={statusStyles[lead.statusName] || 'bg-gray-100 text-gray-600'}>
-                      {lead.statusName}
-                    </Badge>
-                  </td>
-                  <td className="py-3 px-3 lg:py-4 lg:px-5 text-sm text-gray-600">{lead.requestId}</td>
+      {loading ? (
+        <Card className="overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-[var(--color-border)]">
+                  <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer Name</th>
+                  <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Phone</th>
+                  <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
+                  <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Request ID</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {filteredLeads.length === 0 && (
-          <div className="py-12 text-center text-gray-500 text-sm">No leads match your filters.</div>
-        )}
-      </Card>
-
-      {filteredLeads.length > 0 && (
-        <div className="mt-4 sm:mt-6 flex flex-col gap-3 items-center">
-          <p className="text-sm text-gray-500 text-center">
-            Showing {(safeCurrentPage - 1) * ITEMS_PER_PAGE + 1}
-            {' - '}
-            {Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredLeads.length)} of {filteredLeads.length}
-          </p>
-
-          <div className="flex items-center justify-center gap-2 flex-wrap w-full">
-            <Button
-              variant="secondary"
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-              disabled={safeCurrentPage === 1}
-              className="px-3 py-2"
-            >
-              Prev
-            </Button>
-
-            {visiblePageNumbers.map((pageNumber) => {
-              if (typeof pageNumber !== 'number') {
-                return (
-                  <span key={pageNumber} className="px-2 text-gray-500">
-                    ...
-                  </span>
-                )
-              }
-
-              return (
-                <Button
-                  key={pageNumber}
-                  variant={safeCurrentPage === pageNumber ? 'primary' : 'secondary'}
-                  onClick={() => setCurrentPage(pageNumber)}
-                  className="min-w-10 px-3 py-2"
-                >
-                  {pageNumber}
-                </Button>
-              )
-            })}
-
-            <Button
-              variant="secondary"
-              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-              disabled={safeCurrentPage === totalPages}
-              className="px-3 py-2"
-            >
-              Next
-            </Button>
+              </thead>
+              <tbody>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <SkeletonRow key={i} cells={4} />
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
+        </Card>
+      ) : filteredLeads.length === 0 ? (
+        <Card>
+          <EmptyState
+            icon={FiUsers}
+            title="No leads found"
+            description="No leads match your current filters. Try adjusting your search or filters."
+          />
+        </Card>
+      ) : (
+        <>
+          <Card className="hidden md:block overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-muted)]">
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer Name</th>
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Phone</th>
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
+                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Request ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedLeads.map((lead) => (
+                    <tr key={lead.requestId} className="border-b border-[var(--color-border-subtle)] last:border-b-0 hover:bg-[var(--color-surface-muted)] transition-colors">
+                      <td className="py-3 px-5 text-sm font-medium text-[var(--color-text)]">{lead.buyerName}</td>
+                      <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{lead.buyerPhone}</td>
+                      <td className="py-3 px-5">
+                        <Badge tone={statusToneMap[lead.statusName] || 'neutral'}>{lead.statusName}</Badge>
+                      </td>
+                      <td className="py-3 px-5 text-sm text-[var(--color-text-muted)]">{lead.requestId}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+
+          <div className="md:hidden space-y-3">
+            {paginatedLeads.map((lead) => (
+              <Card key={lead.requestId} className="p-4">
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <div>
+                    <p className="text-sm font-semibold text-[var(--color-text)]">{lead.buyerName}</p>
+                    <p className="text-sm text-[var(--color-text-secondary)] mt-0.5">{lead.buyerPhone}</p>
+                  </div>
+                  <Badge tone={statusToneMap[lead.statusName] || 'neutral'}>{lead.statusName}</Badge>
+                </div>
+                <p className="text-xs text-[var(--color-text-muted)]">ID: {lead.requestId}</p>
+              </Card>
+            ))}
+          </div>
+
+          {filteredLeads.length > 0 && (
+            <div className="mt-6 flex flex-col gap-3 items-center">
+              <p className="text-sm text-[var(--color-text-muted)]">
+                Showing {(safeCurrentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredLeads.length)} of {filteredLeads.length}
+              </p>
+              <div className="flex items-center gap-1">
+                <Button variant="secondary" size="sm" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={safeCurrentPage === 1}>Prev</Button>
+                {visiblePageNumbers.map((pn) =>
+                  typeof pn !== 'number' ? (
+                    <span key={pn} className="px-2 text-[var(--color-text-muted)] text-sm">...</span>
+                  ) : (
+                    <Button key={pn} variant={safeCurrentPage === pn ? 'primary' : 'secondary'} size="sm" onClick={() => setCurrentPage(pn)} className="min-w-9">{pn}</Button>
+                  )
+                )}
+                <Button variant="secondary" size="sm" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={safeCurrentPage === totalPages}>Next</Button>
+              </div>
+            </div>
+          )}
+        </>
       )}
-    </div>
+    </>
   )
 }
 

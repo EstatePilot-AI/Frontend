@@ -24,4 +24,7 @@ export const ENDPOINTS = {
   DEALS: {
     GET_ALL: '/Deals/GetAllDeals',
   },
+  DASHBOARD: {
+    GET_GLOBAL_ANALYTICS: '/Dashboard/GetGlobalAnalytics',
+  },
 }
