@@ -1,13 +1,10 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, lazy, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchGlobalAnalytics } from '../../redux/slices/DashboardSlice/dashboardReducer'
 import { FiPhone, FiUsers, FiTrendingUp, FiActivity, FiClock } from 'react-icons/fi'
 import Card from '../../components/ui/Card'
 import Skeleton from '../../components/ui/Skeleton'
 import EmptyState from '../../components/ui/EmptyState'
-import OutcomeDonutChart from './components/charts/OutcomeDonutChart'
-import PeakActivityAreaChart from './components/charts/PeakActivityAreaChart'
-import PropertyStatusBarChart from './components/charts/PropertyStatusBarChart'
 import {
   formatSeconds,
   mapOutcomeDistributionData,
@@ -15,6 +12,15 @@ import {
   mapPropertyStatusData,
 } from './components/charts/dashboardMappers'
 import { getCategoryColor, getDashboardChartTheme } from './components/charts/chartTheme'
+
+const OutcomeDonutChart = lazy(() => import('./components/charts/OutcomeDonutChart'))
+const PeakActivityAreaChart = lazy(() => import('./components/charts/PeakActivityAreaChart'))
+const PropertyStatusBarChart = lazy(() => import('./components/charts/PropertyStatusBarChart'))
+
+const getActiveTheme = () => {
+  if (typeof document === 'undefined') return 'light'
+  return document.documentElement.getAttribute('data-theme') || 'light'
+}
 
 const KpiCard = ({ label, value, icon }) => {
   const Icon = icon
@@ -38,15 +44,40 @@ const KpiCard = ({ label, value, icon }) => {
   )
 }
 
+const ChartSuspenseFallback = () => (
+  <Card className="p-5">
+    <Skeleton className="h-4 w-1/3 mb-4" />
+    <div className="h-75 flex items-end gap-2">
+      {[40, 68, 56, 84, 61, 72].map((height, index) => (
+        <Skeleton key={height + index} className="flex-1 rounded-t-sm" style={{ height: `${height}%` }} />
+      ))}
+    </div>
+  </Card>
+)
+
 const DashBoard = () => {
   const dispatch = useDispatch()
   const { analytics, loading, error } = useSelector((state) => state.dashboard)
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
+  const [activeTheme, setActiveTheme] = useState(getActiveTheme)
 
   useEffect(() => {
     dispatch(fetchGlobalAnalytics())
   }, [dispatch])
+
+  useEffect(() => {
+    if (typeof document === 'undefined' || typeof MutationObserver === 'undefined') return undefined
+
+    const rootElement = document.documentElement
+    const observer = new MutationObserver(() => {
+      setActiveTheme(rootElement.getAttribute('data-theme') || 'light')
+    })
+
+    observer.observe(rootElement, { attributes: true, attributeFilter: ['data-theme'] })
+
+    return () => observer.disconnect()
+  }, [])
 
   const handleApplyFilter = (e) => {
     e.preventDefault()
@@ -75,24 +106,24 @@ const DashBoard = () => {
   }, [analytics])
 
   const outcomeChartData = useMemo(() => {
-    const theme = getDashboardChartTheme()
+    const theme = getDashboardChartTheme(activeTheme)
     return mapOutcomeDistributionData(
       analytics?.outcomeDistributions,
       (name, index) => getCategoryColor(name, theme, index)
     )
-  }, [analytics])
+  }, [analytics, activeTheme])
 
   const peakChartData = useMemo(() => {
     return mapPeakActivityData(analytics?.peakActivityTrends)
   }, [analytics])
 
   const propertyChartData = useMemo(() => {
-    const theme = getDashboardChartTheme()
+    const theme = getDashboardChartTheme(activeTheme)
     return mapPropertyStatusData(
       analytics?.propertyInventoryStatus,
       (name, index) => getCategoryColor(name, theme, index)
     )
-  }, [analytics])
+  }, [analytics, activeTheme])
 
   if (error) {
     return (
@@ -192,11 +223,18 @@ const DashBoard = () => {
       {(loading || analytics) && (
         <>
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
-            <OutcomeDonutChart data={outcomeChartData} loading={loading} />
-            <PeakActivityAreaChart data={peakChartData} loading={loading} />
+            <Suspense fallback={<ChartSuspenseFallback />}>
+              <OutcomeDonutChart data={outcomeChartData} loading={loading} />
+            </Suspense>
+
+            <Suspense fallback={<ChartSuspenseFallback />}>
+              <PeakActivityAreaChart data={peakChartData} loading={loading} />
+            </Suspense>
           </div>
 
-          <PropertyStatusBarChart data={propertyChartData} loading={loading} />
+          <Suspense fallback={<ChartSuspenseFallback />}>
+            <PropertyStatusBarChart data={propertyChartData} loading={loading} />
+          </Suspense>
         </>
       )}
     </>

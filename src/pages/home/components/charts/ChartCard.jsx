@@ -8,7 +8,7 @@ const ChartSkeleton = ({ variant = 'cartesian' }) => {
   if (variant === 'circular') {
     return (
       <div className="flex items-center justify-center h-75">
-        <Skeleton className="h-56 w-56 rounded-full!" />
+        <Skeleton className="h-56 w-56 rounded-full" />
       </div>
     )
   }
