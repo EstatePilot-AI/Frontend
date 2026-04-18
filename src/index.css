@@ -17,6 +17,7 @@
 
     --color-accent: #10b981;
     --color-accent-hover: #059669;
+    --color-brand-accent-gold: #b7791f;
 
     --color-background: #f7f9fa;
     --color-surface: #ffffff;
@@ -86,6 +87,7 @@
 
     --color-accent: #6EE7B7;
     --color-accent-hover: #34D399;
+    --color-brand-accent-gold: #f4c95d;
 
     --color-background: #09090B;
     --color-surface: #111113;
@@ -178,6 +180,60 @@
 }
 
 @layer components {
+  .ep-brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    text-align: left;
+    transition: opacity 0.2s ease;
+  }
+
+  .ep-brand-logo:hover {
+    opacity: 0.85;
+  }
+
+  .ep-brand-logo-icon {
+    font-size: 1.35rem;
+    color: var(--color-primary);
+  }
+
+  .ep-brand-logo-text {
+    display: inline-flex;
+    align-items: baseline;
+    white-space: nowrap;
+  }
+
+  .ep-brand-logo-serif {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+  }
+
+  .ep-brand-logo-sans {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+    font-size: 0.85em;
+    color: var(--color-brand-accent-gold);
+    margin-left: 0.1em;
+  }
+
+  .ep-topbar-logo {
+    font-size: 1.25rem;
+  }
+
+  .ep-topbar-logo .ep-brand-logo-icon {
+    font-size: 1.2rem;
+  }
+
   .ep-layout {
     display: flex;
     min-height: 100vh;

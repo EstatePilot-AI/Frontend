@@ -1,36 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { FaBuilding } from 'react-icons/fa6'
 import { FiMoon, FiSun, FiMenu, FiSettings, FiLogOut, FiUser } from 'react-icons/fi'
 import { logout, logoutApi } from '../../../redux/slices/AuthSlice/authReducer'
 import Avatar from '../../../components/ui/Avatar'
-
-const ROUTE_TITLES = {
-  '/': 'Dashboard',
-  '/properties': 'Properties',
-  '/clients': 'Clients',
-  '/leads': 'Leads',
-  '/deals': 'Deals',
-  '/requests': 'Requests',
-  '/calllogs': 'Call Logs',
-  '/tasks': 'Tasks',
-  '/settings': 'Settings',
-}
-
-const getPageTitle = (pathname) => {
-  if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname]
-  const match = Object.keys(ROUTE_TITLES)
-    .filter((k) => k !== '/')
-    .find((k) => pathname.startsWith(k))
-  return match ? ROUTE_TITLES[match] : 'EstatePilot'
-}
 
 const Topbar = ({ theme, onToggleTheme, onMenuToggle }) => {
   const user = useSelector((state) => state.user.profile)
   const token = useSelector((state) => state.auth.token)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const location = useLocation()
   const [avatarMenuOpen, setAvatarMenuOpen] = useState(false)
   const avatarMenuRef = useRef(null)
 
@@ -51,8 +31,6 @@ const Topbar = ({ theme, onToggleTheme, onMenuToggle }) => {
     navigate('/login')
   }
 
-  const pageTitle = getPageTitle(location.pathname)
-
   return (
     <header className="ep-topbar">
       <button
@@ -63,7 +41,18 @@ const Topbar = ({ theme, onToggleTheme, onMenuToggle }) => {
         <FiMenu size={20} />
       </button>
 
-      <h1 className="text-base font-semibold text-(--color-text)">{pageTitle}</h1>
+      <button
+        type="button"
+        onClick={() => navigate('/')}
+        className="ep-brand-logo ep-topbar-logo"
+        aria-label="Go to dashboard"
+      >
+        <FaBuilding className="ep-brand-logo-icon" aria-hidden="true" />
+        <span className="ep-brand-logo-text">
+          <span className="ep-brand-logo-serif">Estate</span>
+          <span className="ep-brand-logo-sans">Pilot</span>
+        </span>
+      </button>
 
       <div className="flex items-center gap-1 ml-auto">
         <button

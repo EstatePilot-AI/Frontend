@@ -15,7 +15,6 @@ import {
   FiX,
 } from 'react-icons/fi'
 import { logout, logoutApi } from '../../../redux/slices/AuthSlice/authReducer'
-import Avatar from '../../../components/ui/Avatar'
 
 const NAV_GROUPS = [
   {
@@ -96,26 +95,23 @@ const SideBar = ({ isOpen, onClose }) => {
         onClick={onClose}
       />
       <aside className={`ep-sidebar ${isOpen ? 'ep-sidebar-open' : ''}`}>
+        <div className="md:hidden p-2 border-b border-(--color-border) flex justify-end">
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-sm text-(--color-text-muted) hover:bg-(--color-surface-muted)"
+            aria-label="Close sidebar"
+          >
+            <FiX size={18} />
+          </button>
+        </div>
+
         <div className="p-4 border-b border-(--color-border)">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 min-w-0">
-              <Avatar name={user?.name || 'User'} size="sm" />
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-(--color-text) truncate">
-                  {user?.name || 'User'}
-                </p>
-                <p className="text-xs text-(--color-text-muted) truncate">
-                  {user?.role || 'Staff'}
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="md:hidden w-8 h-8 flex items-center justify-center rounded-sm text-(--color-text-muted) hover:bg-(--color-surface-muted)"
-            >
-              <FiX size={18} />
-            </button>
-          </div>
+          <p className="text-sm font-semibold text-(--color-text) truncate">
+            {user?.name || 'User'}
+          </p>
+          <p className="text-xs text-(--color-text-muted) truncate mt-0.5">
+            {user?.role || 'Staff'}
+          </p>
         </div>
 
         <nav className="flex-1 p-3 overflow-y-auto">
