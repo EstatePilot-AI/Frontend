@@ -27,8 +27,7 @@ const NAV_GROUPS = [
   {
     label: 'MANAGEMENT',
     items: [
-      { icon: FiHome, label: 'Properties', path: '/properties' },
-      { icon: FiUsers, label: 'Clients', path: '/clients' },
+      { icon: FiUsers, label: 'Agents', path: '/agents' },
       { icon: FiUser, label: 'Leads', path: '/leads' },
       { icon: FiBriefcase, label: 'Deals', path: '/deals' },
     ],
@@ -38,7 +37,6 @@ const NAV_GROUPS = [
     items: [
       { icon: FiInbox, label: 'Requests', path: '/requests' },
       { icon: FiPhone, label: 'Call Logs', path: '/calllogs' },
-      { icon: FiCheckSquare, label: 'Tasks', path: '/tasks' },
     ],
   },
   {
