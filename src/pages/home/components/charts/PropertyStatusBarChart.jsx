@@ -1,39 +1,20 @@
 import React from 'react'
-import {
-  BarChart,
-  Bar,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Cell,
-  LabelList,
-} from 'recharts'
 import ChartCard from './ChartCard'
-import { getDashboardChartTheme } from './chartTheme'
-
-const PropertyTooltip = ({ active, payload, label, theme }) => {
-  if (!active || !payload || !payload.length) return null
-
-  const item = payload[0].payload
-
-  return (
-    <div
-      className="rounded-md border px-3 py-2 text-xs"
-      style={{ backgroundColor: theme.surface, borderColor: theme.border, color: theme.text }}
-    >
-      <p className="font-medium">{label}</p>
-      <p className="mt-1" style={{ color: theme.mutedText }}>
-        {item.count} properties ({item.percentage.toFixed(1)}%)
-      </p>
-    </div>
-  )
-}
 
 const PropertyStatusBarChart = ({ data = [], loading = false }) => {
-  const theme = getDashboardChartTheme()
-  const hasData = data.length > 0
+  const totalProperties = data.reduce((sum, item) => sum + item.count, 0)
+  const hasData = data.length > 0 && totalProperties > 0
+  const normalizedData = totalProperties > 0
+    ? data.map((item) => ({
+        ...item,
+        normalizedWidth: (item.count / totalProperties) * 100,
+        normalizedPercentage: (item.count / totalProperties) * 100,
+      }))
+    : data.map((item) => ({
+        ...item,
+        normalizedWidth: 0,
+        normalizedPercentage: 0,
+      }))
 
   return (
     <ChartCard
@@ -41,36 +22,52 @@ const PropertyStatusBarChart = ({ data = [], loading = false }) => {
       subtitle="Current property count by lifecycle stage"
       loading={loading}
       isEmpty={!hasData}
-      className="h-full"
     >
-      <div className="h-75">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} layout="vertical" margin={{ top: 8, right: 18, left: 8, bottom: 8 }}>
-            <CartesianGrid stroke={theme.border} strokeDasharray="3 3" horizontal={false} />
-            <XAxis
-              type="number"
-              tick={{ fill: theme.mutedText, fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-              allowDecimals={false}
-            />
-            <YAxis
-              type="category"
-              dataKey="name"
-              tick={{ fill: theme.text, fontSize: 12 }}
-              axisLine={false}
-              tickLine={false}
-              width={90}
-            />
-            <Tooltip content={<PropertyTooltip theme={theme} />} />
-            <Bar dataKey="count" radius={[0, 8, 8, 0]} barSize={24}>
-              {data.map((entry, index) => (
-                <Cell key={`${entry.name}-${index}`} fill={entry.color} />
+      <div className="flex flex-col gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-[220px_minmax(0,1fr)] gap-4 items-center">
+          <div className="rounded-lg border border-(--color-border) bg-(--color-surface-muted) px-4 py-3">
+            <p className="text-xs uppercase tracking-wide text-(--color-text-muted)">Total Properties</p>
+            <p className="mt-1 text-3xl font-bold text-(--color-text)">{totalProperties.toLocaleString()}</p>
+          </div>
+
+          <div>
+            <p className="text-xs uppercase tracking-wide text-(--color-text-muted) mb-2">Distribution</p>
+            <div className="h-3 w-full rounded-full bg-(--color-surface-muted) overflow-hidden border border-(--color-border)">
+              {normalizedData.map((item, index) => (
+                <div
+                  key={`distribution-${item.name}-${index}`}
+                  className="h-full float-left"
+                  style={{ width: `${Math.max(0, Math.min(100, item.normalizedWidth))}%`, backgroundColor: item.color }}
+                  title={`${item.name}: ${item.normalizedPercentage.toFixed(1)}%`}
+                />
               ))}
-              <LabelList dataKey="count" position="right" fill={theme.text} fontSize={11} />
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        <ul className="space-y-3 pr-1">
+          {normalizedData.map((item, index) => (
+            <li key={`${item.name}-${index}`} className="rounded-md border border-(--color-border) bg-(--color-surface-muted) p-3">
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                  <span className="text-(--color-text-secondary) truncate">{item.name}</span>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="font-semibold text-(--color-text)">{item.count}</p>
+                  <p className="text-xs text-(--color-text-muted)">{item.normalizedPercentage.toFixed(1)}%</p>
+                </div>
+              </div>
+
+              <div className="mt-2 h-1.5 w-full rounded-full bg-(--color-surface) overflow-hidden">
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${Math.max(0, Math.min(100, item.normalizedWidth))}%`, backgroundColor: item.color }}
+                />
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </ChartCard>
   )
