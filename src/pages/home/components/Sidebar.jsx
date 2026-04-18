@@ -15,6 +15,7 @@ import {
   FiX,
 } from 'react-icons/fi'
 import { logout, logoutApi } from '../../../redux/slices/AuthSlice/authReducer'
+import Avatar from '../../../components/ui/Avatar'
 
 const NAV_GROUPS = [
   {
@@ -106,12 +107,17 @@ const SideBar = ({ isOpen, onClose }) => {
         </div>
 
         <div className="p-4 border-b border-(--color-border)">
-          <p className="text-sm font-semibold text-(--color-text) truncate">
-            {user?.name || 'User'}
-          </p>
-          <p className="text-xs text-(--color-text-muted) truncate mt-0.5">
-            {user?.role || 'Staff'}
-          </p>
+          <div className="flex items-center gap-3 min-w-0">
+            <Avatar name={user?.name || 'User'} size="sm" />
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-(--color-text) truncate">
+                {user?.name || 'User'}
+              </p>
+              <p className="text-xs text-(--color-text-muted) truncate mt-0.5">
+                {user?.role || 'Staff'}
+              </p>
+            </div>
+          </div>
         </div>
 
         <nav className="flex-1 p-3 overflow-y-auto">
