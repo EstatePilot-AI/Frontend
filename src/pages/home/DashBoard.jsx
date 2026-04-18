@@ -116,12 +116,12 @@ const DashBoard = () => {
       ?? analytics?.callConversionRate
 
     return [
-      { label: 'Total Engagements', value: m.totalEngagements?.toLocaleString() ?? '—', icon: FiPhone },
-      { label: 'Qualified Leads', value: m.qualifiedLeads?.toLocaleString() ?? '—', icon: FiUsers },
-      { label: 'Conversion Rate', value: conversionRate != null ? `${Number(conversionRate).toFixed(1)}%` : '—', icon: FiTrendingUp },
       { label: 'Total Revenue', value: formatCurrency(totalRevenue), icon: FiDollarSign },
       { label: 'Average Deal Value', value: formatCurrency(averageDealValue), icon: FiBriefcase },
       { label: 'Deal Conversion Rate', value: dealConversionRate != null ? `${Number(dealConversionRate).toFixed(1)}%` : '—', icon: FiTrendingUp },
+      { label: 'Total Engagements', value: m.totalEngagements?.toLocaleString() ?? '—', icon: FiPhone },
+      { label: 'Qualified Leads', value: m.qualifiedLeads?.toLocaleString() ?? '—', icon: FiUsers },
+      { label: 'Conversion Rate', value: conversionRate != null ? `${Number(conversionRate).toFixed(1)}%` : '—', icon: FiTrendingUp },
       { label: 'Resource Hours', value: m.resourceOptimizationHours != null ? `${m.resourceOptimizationHours.toFixed(1)} hrs` : '—', icon: FiClock },
       { label: 'Avg Handle Time', value: formatSeconds(m.averageHandlingTime), icon: FiActivity },
     ]
