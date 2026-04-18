@@ -81,12 +81,12 @@ const Deals = () => {
   return (
     <>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[var(--color-text)]">Deals</h1>
-        <p className="text-sm text-[var(--color-text-muted)] mt-1">Track and manage property deals</p>
+        <h1 className="text-2xl font-bold text-(--color-text)">Deals</h1>
+        <p className="text-sm text-(--color-text-muted) mt-1">Track and manage property deals</p>
       </div>
 
       {error && (
-        <div className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)] text-[var(--color-danger)] px-4 py-3 rounded-[var(--radius-md)] mb-6 text-sm">
+        <div className="bg-(--color-danger-soft) border border-(--color-danger) text-(--color-danger) px-4 py-3 rounded-md mb-6 text-sm">
           {error}
         </div>
       )}
@@ -110,7 +110,7 @@ const Deals = () => {
               placeholder="Search buyer, seller, agent..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1) }}
-              leftElement={<FiSearch size={16} className="text-[var(--color-text-muted)] ml-3" />}
+              leftElement={<FiSearch size={16} className="text-(--color-text-muted) ml-3" />}
               inputClassName="min-h-9 text-sm"
             />
           </div>
@@ -121,14 +121,14 @@ const Deals = () => {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-[var(--color-border)]">
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Deal ID</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Seller</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Agent</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Amount</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Date</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
+                  <tr className="border-b border-(--color-border) bg-(--color-surface-muted)">
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Deal ID</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Buyer</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Seller</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Agent</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Amount</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Date</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -153,25 +153,25 @@ const Deals = () => {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-muted)]">
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Deal ID</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Seller</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Agent</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Amount</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Date</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
+                    <tr className="border-b border-(--color-border) bg-(--color-surface-muted)">
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Deal ID</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Buyer</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Seller</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Agent</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Amount</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Date</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {paginatedDeals.map((deal, idx) => (
-                      <tr key={deal.dealId ?? `deal-${idx}`} className="border-b border-[var(--color-border-subtle)] last:border-b-0 hover:bg-[var(--color-surface-muted)] transition-colors">
-                        <td className="py-3 px-5 text-sm text-[var(--color-text-muted)]">#{deal.dealId}</td>
-                        <td className="py-3 px-5 text-sm font-medium text-[var(--color-text)]">{deal.buyer}</td>
-                        <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{deal.seller}</td>
-                        <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{deal.agent}</td>
-                        <td className="py-3 px-5 text-sm font-medium text-[var(--color-text)]">EGP {deal.finalSaleAmount?.toLocaleString()}</td>
-                        <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{deal.dealDate}</td>
+                      <tr key={deal.dealId ?? `deal-${idx}`} className="border-b border-(--color-border-subtle) last:border-b-0 hover:bg-(--color-surface-muted) transition-colors">
+                        <td className="py-3 px-5 text-sm text-(--color-text-muted)">#{deal.dealId}</td>
+                        <td className="py-3 px-5 text-sm font-medium text-(--color-text)">{deal.buyer}</td>
+                        <td className="py-3 px-5 text-sm text-(--color-text-secondary)">{deal.seller}</td>
+                        <td className="py-3 px-5 text-sm text-(--color-text-secondary)">{deal.agent}</td>
+                        <td className="py-3 px-5 text-sm font-medium text-(--color-text)">EGP {deal.finalSaleAmount?.toLocaleString()}</td>
+                        <td className="py-3 px-5 text-sm text-(--color-text-secondary)">{deal.dealDate}</td>
                         <td className="py-3 px-5"><Badge tone={statusToneMap[deal.dealStatus] || 'neutral'}>{deal.dealStatus || 'N/A'}</Badge></td>
                       </tr>
                     ))}
@@ -185,19 +185,19 @@ const Deals = () => {
                 <Card key={deal.dealId ?? `deal-card-${idx}`} className="p-4">
                   <div className="flex items-start justify-between gap-2 mb-3">
                     <div>
-                      <p className="text-sm font-semibold text-[var(--color-text)]">Buyer: {deal.buyer}</p>
-                      <p className="text-sm text-[var(--color-text-secondary)] mt-0.5">Seller: {deal.seller}</p>
+                      <p className="text-sm font-semibold text-(--color-text)">Buyer: {deal.buyer}</p>
+                      <p className="text-sm text-(--color-text-secondary) mt-0.5">Seller: {deal.seller}</p>
                     </div>
                     <Badge tone={statusToneMap[deal.dealStatus] || 'neutral'}>{deal.dealStatus || 'N/A'}</Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
-                      <p className="text-xs text-[var(--color-text-muted)]">Amount</p>
-                      <p className="font-medium text-[var(--color-text)]">EGP {deal.finalSaleAmount?.toLocaleString()}</p>
+                      <p className="text-xs text-(--color-text-muted)">Amount</p>
+                      <p className="font-medium text-(--color-text)">EGP {deal.finalSaleAmount?.toLocaleString()}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-[var(--color-text-muted)]">Agent</p>
-                      <p className="text-[var(--color-text-secondary)]">{deal.agent}</p>
+                      <p className="text-xs text-(--color-text-muted)">Agent</p>
+                      <p className="text-(--color-text-secondary)">{deal.agent}</p>
                     </div>
                   </div>
                 </Card>
@@ -206,14 +206,14 @@ const Deals = () => {
 
             {filteredDeals.length > 0 && (
               <div className="mt-6 flex flex-col gap-3 items-center">
-                <p className="text-sm text-[var(--color-text-muted)]">
+                <p className="text-sm text-(--color-text-muted)">
                   Showing {(safeCurrentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredDeals.length)} of {filteredDeals.length}
                 </p>
                 <div className="flex items-center gap-1">
                   <Button variant="secondary" size="sm" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={safeCurrentPage === 1}>Prev</Button>
                   {visiblePageNumbers.map((pn) =>
                     typeof pn !== 'number' ? (
-                      <span key={pn} className="px-2 text-[var(--color-text-muted)] text-sm">...</span>
+                      <span key={pn} className="px-2 text-(--color-text-muted) text-sm">...</span>
                     ) : (
                       <Button key={pn} variant={safeCurrentPage === pn ? 'primary' : 'secondary'} size="sm" onClick={() => setCurrentPage(pn)} className="min-w-9">{pn}</Button>
                     )

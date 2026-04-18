@@ -57,18 +57,18 @@ const Topbar = ({ theme, onToggleTheme, onMenuToggle }) => {
     <header className="ep-topbar">
       <button
         onClick={onMenuToggle}
-        className="md:hidden w-9 h-9 mr-2 rounded-[var(--radius-md)] flex items-center justify-center text-[var(--color-text-muted)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-text)] transition-colors"
+        className="md:hidden w-9 h-9 mr-2 rounded-md flex items-center justify-center text-(--color-text-muted) hover:bg-(--color-surface-muted) hover:text-(--color-text) transition-colors"
         aria-label="Open menu"
       >
         <FiMenu size={20} />
       </button>
 
-      <h1 className="text-base font-semibold text-[var(--color-text)]">{pageTitle}</h1>
+      <h1 className="text-base font-semibold text-(--color-text)">{pageTitle}</h1>
 
       <div className="flex items-center gap-1 ml-auto">
         <button
           onClick={onToggleTheme}
-          className="w-9 h-9 rounded-[var(--radius-md)] flex items-center justify-center text-[var(--color-text-muted)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-text)] transition-colors"
+          className="w-9 h-9 rounded-md flex items-center justify-center text-(--color-text-muted) hover:bg-(--color-surface-muted) hover:text-(--color-text) transition-colors"
           aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
         >
           {theme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
@@ -77,34 +77,34 @@ const Topbar = ({ theme, onToggleTheme, onMenuToggle }) => {
         <div className="relative ml-2" ref={avatarMenuRef}>
           <button
             onClick={() => setAvatarMenuOpen(!avatarMenuOpen)}
-            className="flex items-center gap-2 py-1 px-2 rounded-[var(--radius-md)] hover:bg-[var(--color-surface-muted)] transition-colors"
+            className="flex items-center gap-2 py-1 px-2 rounded-md hover:bg-(--color-surface-muted) transition-colors"
           >
             <Avatar name={user?.name || 'User'} size="sm" />
-            <span className="text-sm font-medium text-[var(--color-text)] hidden sm:block max-w-24 truncate">
+            <span className="text-sm font-medium text-(--color-text) hidden sm:block max-w-24 truncate">
               {user?.name || 'User'}
             </span>
           </button>
 
           {avatarMenuOpen && (
-            <div className="absolute right-0 top-full mt-1 w-48 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-lg)] py-1 z-50">
+            <div className="absolute right-0 top-full mt-1 w-48 bg-(--color-surface) border border-(--color-border) rounded-lg shadow-(--shadow-lg) py-1 z-50">
               <button
                 onClick={() => { navigate('/settings'); setAvatarMenuOpen(false) }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-muted)] transition-colors"
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-text-secondary) hover:bg-(--color-surface-muted) transition-colors"
               >
                 <FiUser size={15} />
                 Profile
               </button>
               <button
                 onClick={() => { navigate('/settings'); setAvatarMenuOpen(false) }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-muted)] transition-colors"
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-text-secondary) hover:bg-(--color-surface-muted) transition-colors"
               >
                 <FiSettings size={15} />
                 Settings
               </button>
-              <div className="border-t border-[var(--color-border)] my-1" />
+              <div className="border-t border-(--color-border) my-1" />
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[var(--color-danger)] hover:bg-[var(--color-danger-soft)] transition-colors"
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-danger) hover:bg-(--color-danger-soft) transition-colors"
               >
                 <FiLogOut size={15} />
                 Sign out

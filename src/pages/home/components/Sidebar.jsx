@@ -54,10 +54,10 @@ const NavItem = ({ icon, label, isActive, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 ${
+      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors duration-150 ${
         isActive
-          ? 'bg-[var(--color-primary-soft)] text-[var(--color-primary)]'
-          : 'text-[var(--color-text-secondary)] hover:bg-[rgba(255,255,255,0.04)] hover:text-[var(--color-text)]'
+          ? 'bg-(--color-primary-soft) text-(--color-primary)'
+          : 'text-(--color-text-secondary) hover:bg-(--color-surface-muted) hover:text-(--color-text)'
       }`}
     >
       <Icon size={18} className={isActive ? '' : 'opacity-60'} />
@@ -96,22 +96,22 @@ const SideBar = ({ isOpen, onClose }) => {
         onClick={onClose}
       />
       <aside className={`ep-sidebar ${isOpen ? 'ep-sidebar-open' : ''}`}>
-        <div className="p-4 border-b border-[var(--color-border)]">
+        <div className="p-4 border-b border-(--color-border)">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 min-w-0">
               <Avatar name={user?.name || 'User'} size="sm" />
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-[var(--color-text)] truncate">
+                <p className="text-sm font-semibold text-(--color-text) truncate">
                   {user?.name || 'User'}
                 </p>
-                <p className="text-xs text-[var(--color-text-muted)] truncate">
+                <p className="text-xs text-(--color-text-muted) truncate">
                   {user?.role || 'Staff'}
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="md:hidden w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-muted)]"
+              className="md:hidden w-8 h-8 flex items-center justify-center rounded-sm text-(--color-text-muted) hover:bg-(--color-surface-muted)"
             >
               <FiX size={18} />
             </button>
@@ -122,7 +122,7 @@ const SideBar = ({ isOpen, onClose }) => {
           {NAV_GROUPS.map((group) => (
             <div key={group.label} className="mb-3">
               <div className="px-3 pt-5 pb-1.5">
-                <span className="text-[10px] font-bold tracking-[0.1em] uppercase text-[var(--color-text-muted)]">
+                <span className="text-[10px] font-bold tracking-widest uppercase text-(--color-text-muted)">
                   {group.label}
                 </span>
               </div>
@@ -139,10 +139,10 @@ const SideBar = ({ isOpen, onClose }) => {
           ))}
         </nav>
 
-        <div className="p-3 border-t border-[var(--color-border)]">
+        <div className="p-3 border-t border-(--color-border)">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-sm font-medium text-[var(--color-danger)] hover:bg-[var(--color-danger-soft)] transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-(--color-danger) hover:bg-(--color-danger-soft) transition-colors"
           >
             <FiLogOut size={18} />
             <span>Logout</span>

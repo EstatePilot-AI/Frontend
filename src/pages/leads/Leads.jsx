@@ -85,12 +85,12 @@ const Leads = () => {
   return (
     <>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[var(--color-text)]">Leads</h1>
-        <p className="text-sm text-[var(--color-text-muted)] mt-1">Manage and track your property leads</p>
+        <h1 className="text-2xl font-bold text-(--color-text)">Leads</h1>
+        <p className="text-sm text-(--color-text-muted) mt-1">Manage and track your property leads</p>
       </div>
 
       {error && (
-        <div className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)] text-[var(--color-danger)] px-4 py-3 rounded-[var(--radius-md)] mb-6 text-sm">
+        <div className="bg-(--color-danger-soft) border border-(--color-danger) text-(--color-danger) px-4 py-3 rounded-md mb-6 text-sm">
           {error}
         </div>
       )}
@@ -114,7 +114,7 @@ const Leads = () => {
             placeholder="Search leads..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setCurrentPage(1) }}
-            leftElement={<FiSearch size={16} className="text-[var(--color-text-muted)] ml-3" />}
+            leftElement={<FiSearch size={16} className="text-(--color-text-muted) ml-3" />}
             inputClassName="min-h-9 text-sm"
           />
         </div>
@@ -125,11 +125,11 @@ const Leads = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[var(--color-border)]">
-                  <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer Name</th>
-                  <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Phone</th>
-                  <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
-                  <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Request ID</th>
+                <tr className="border-b border-(--color-border) bg-(--color-surface-muted)">
+                  <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Buyer Name</th>
+                  <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Phone</th>
+                  <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Status</th>
+                  <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Request ID</th>
                 </tr>
               </thead>
               <tbody>
@@ -154,22 +154,22 @@ const Leads = () => {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-muted)]">
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer Name</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Phone</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Request ID</th>
+                  <tr className="border-b border-(--color-border) bg-(--color-surface-muted)">
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Buyer Name</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Phone</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Status</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Request ID</th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedLeads.map((lead) => (
-                    <tr key={lead.requestId} className="border-b border-[var(--color-border-subtle)] last:border-b-0 hover:bg-[var(--color-surface-muted)] transition-colors">
-                      <td className="py-3 px-5 text-sm font-medium text-[var(--color-text)]">{lead.buyerName}</td>
-                      <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{lead.buyerPhone}</td>
+                    <tr key={lead.requestId} className="border-b border-(--color-border-subtle) last:border-b-0 hover:bg-(--color-surface-muted) transition-colors">
+                      <td className="py-3 px-5 text-sm font-medium text-(--color-text)">{lead.buyerName}</td>
+                      <td className="py-3 px-5 text-sm text-(--color-text-secondary)">{lead.buyerPhone}</td>
                       <td className="py-3 px-5">
                         <Badge tone={statusToneMap[lead.statusName] || 'neutral'}>{lead.statusName}</Badge>
                       </td>
-                      <td className="py-3 px-5 text-sm text-[var(--color-text-muted)]">{lead.requestId}</td>
+                      <td className="py-3 px-5 text-sm text-(--color-text-muted)">{lead.requestId}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -182,26 +182,26 @@ const Leads = () => {
               <Card key={lead.requestId} className="p-4">
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div>
-                    <p className="text-sm font-semibold text-[var(--color-text)]">{lead.buyerName}</p>
-                    <p className="text-sm text-[var(--color-text-secondary)] mt-0.5">{lead.buyerPhone}</p>
+                    <p className="text-sm font-semibold text-(--color-text)">{lead.buyerName}</p>
+                    <p className="text-sm text-(--color-text-secondary) mt-0.5">{lead.buyerPhone}</p>
                   </div>
                   <Badge tone={statusToneMap[lead.statusName] || 'neutral'}>{lead.statusName}</Badge>
                 </div>
-                <p className="text-xs text-[var(--color-text-muted)]">ID: {lead.requestId}</p>
+                <p className="text-xs text-(--color-text-muted)">ID: {lead.requestId}</p>
               </Card>
             ))}
           </div>
 
           {filteredLeads.length > 0 && (
             <div className="mt-6 flex flex-col gap-3 items-center">
-              <p className="text-sm text-[var(--color-text-muted)]">
+              <p className="text-sm text-(--color-text-muted)">
                 Showing {(safeCurrentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredLeads.length)} of {filteredLeads.length}
               </p>
               <div className="flex items-center gap-1">
                 <Button variant="secondary" size="sm" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={safeCurrentPage === 1}>Prev</Button>
                 {visiblePageNumbers.map((pn) =>
                   typeof pn !== 'number' ? (
-                    <span key={pn} className="px-2 text-[var(--color-text-muted)] text-sm">...</span>
+                    <span key={pn} className="px-2 text-(--color-text-muted) text-sm">...</span>
                   ) : (
                     <Button key={pn} variant={safeCurrentPage === pn ? 'primary' : 'secondary'} size="sm" onClick={() => setCurrentPage(pn)} className="min-w-9">{pn}</Button>
                   )

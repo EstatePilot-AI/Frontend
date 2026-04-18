@@ -89,12 +89,12 @@ const CallLogs = () => {
   return (
     <>
       <div className="mb-6">
-          <h1 className="text-2xl font-bold text-[var(--color-text)]">Call Logs</h1>
-          <p className="text-sm text-[var(--color-text-muted)] mt-1">Review call history and outcomes</p>
+          <h1 className="text-2xl font-bold text-(--color-text)">Call Logs</h1>
+          <p className="text-sm text-(--color-text-muted) mt-1">Review call history and outcomes</p>
         </div>
 
         {error && (
-          <div className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)] text-[var(--color-danger)] px-4 py-3 rounded-[var(--radius-md)] mb-6 text-sm">
+          <div className="bg-(--color-danger-soft) border border-(--color-danger) text-(--color-danger) px-4 py-3 rounded-md mb-6 text-sm">
             {error}
           </div>
         )}
@@ -118,7 +118,7 @@ const CallLogs = () => {
               placeholder="Search by name..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1) }}
-              leftElement={<FiSearch size={16} className="text-[var(--color-text-muted)] ml-3" />}
+              leftElement={<FiSearch size={16} className="text-(--color-text-muted) ml-3" />}
               inputClassName="min-h-9 text-sm"
             />
           </div>
@@ -129,13 +129,13 @@ const CallLogs = () => {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-[var(--color-border)]">
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Type</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Outcome</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Duration</th>
-                    <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Time</th>
+                  <tr className="border-b border-(--color-border) bg-(--color-surface-muted)">
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Buyer</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Type</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Status</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Outcome</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Duration</th>
+                    <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Time</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -160,28 +160,28 @@ const CallLogs = () => {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-muted)]">
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Buyer</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Type</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Status</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Outcome</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Duration</th>
-                      <th className="text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider py-3 px-5">Time</th>
+                    <tr className="border-b border-(--color-border) bg-(--color-surface-muted)">
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Buyer</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Type</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Status</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Outcome</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Duration</th>
+                      <th className="text-left text-xs font-semibold text-(--color-text-muted) uppercase tracking-wider py-3 px-5">Time</th>
                     </tr>
                   </thead>
                   <tbody>
                     {paginatedLogs.map((call) => (
                       <tr
                         key={call.callId}
-                        className="border-b border-[var(--color-border-subtle)] last:border-b-0 hover:bg-[var(--color-surface-muted)] transition-colors cursor-pointer"
+                        className="border-b border-(--color-border-subtle) last:border-b-0 hover:bg-(--color-surface-muted) transition-colors cursor-pointer"
                         onClick={() => handleViewDetails(call.callId)}
                       >
-                        <td className="py-3 px-5 text-sm font-medium text-[var(--color-text)]">{call.buyerName}</td>
-                        <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{call.callType}</td>
+                        <td className="py-3 px-5 text-sm font-medium text-(--color-text)">{call.buyerName}</td>
+                        <td className="py-3 px-5 text-sm text-(--color-text-secondary)">{call.callType}</td>
                         <td className="py-3 px-5"><Badge tone={sessionStateToneMap[call.callSessionState] || 'neutral'}>{call.callSessionState}</Badge></td>
                         <td className="py-3 px-5"><Badge tone={outcomeToneMap[call.callOutcome] || 'neutral'}>{call.callOutcome}</Badge></td>
-                        <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)]">{call.duration}s</td>
-                        <td className="py-3 px-5 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">{call.timeStamp}</td>
+                        <td className="py-3 px-5 text-sm text-(--color-text-secondary)">{call.duration}s</td>
+                        <td className="py-3 px-5 text-sm text-(--color-text-secondary) whitespace-nowrap">{call.timeStamp}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -194,19 +194,19 @@ const CallLogs = () => {
                 <Card key={call.callId} className="p-4" hover onClick={() => handleViewDetails(call.callId)}>
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div>
-                      <p className="text-sm font-semibold text-[var(--color-text)]">{call.buyerName}</p>
-                      <p className="text-sm text-[var(--color-text-secondary)]">{call.callType}</p>
+                      <p className="text-sm font-semibold text-(--color-text)">{call.buyerName}</p>
+                      <p className="text-sm text-(--color-text-secondary)">{call.callType}</p>
                     </div>
                     <Badge tone={outcomeToneMap[call.callOutcome] || 'neutral'}>{call.callOutcome}</Badge>
                   </div>
                   <div className="flex gap-4 text-sm">
                     <div>
-                      <span className="text-xs text-[var(--color-text-muted)]">Duration: </span>
-                      <span className="text-[var(--color-text-secondary)]">{call.duration}s</span>
+                      <span className="text-xs text-(--color-text-muted)">Duration: </span>
+                      <span className="text-(--color-text-secondary)">{call.duration}s</span>
                     </div>
                     <div>
-                      <span className="text-xs text-[var(--color-text-muted)]">Time: </span>
-                      <span className="text-[var(--color-text-secondary)]">{call.timeStamp}</span>
+                      <span className="text-xs text-(--color-text-muted)">Time: </span>
+                      <span className="text-(--color-text-secondary)">{call.timeStamp}</span>
                     </div>
                   </div>
                 </Card>
@@ -215,14 +215,14 @@ const CallLogs = () => {
 
             {filteredLogs.length > 0 && (
               <div className="mt-6 flex flex-col gap-3 items-center">
-                <p className="text-sm text-[var(--color-text-muted)]">
+                <p className="text-sm text-(--color-text-muted)">
                   Showing {(safeCurrentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredLogs.length)} of {filteredLogs.length}
                 </p>
                 <div className="flex items-center gap-1">
                   <Button variant="secondary" size="sm" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={safeCurrentPage === 1}>Prev</Button>
                   {visiblePageNumbers.map((pn) =>
                     typeof pn !== 'number' ? (
-                      <span key={pn} className="px-2 text-[var(--color-text-muted)] text-sm">...</span>
+                      <span key={pn} className="px-2 text-(--color-text-muted) text-sm">...</span>
                     ) : (
                       <Button key={pn} variant={safeCurrentPage === pn ? 'primary' : 'secondary'} size="sm" onClick={() => setCurrentPage(pn)} className="min-w-9">{pn}</Button>
                     )

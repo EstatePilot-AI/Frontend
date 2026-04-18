@@ -71,6 +71,9 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
 
+    --color-sidebar-bg: var(--color-surface);
+    --color-topbar-bg: var(--color-surface);
+
     --sidebar-width: 256px;
     --topbar-height: 56px;
   }
@@ -131,8 +134,8 @@
     --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.14);
     --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.16);
 
-    --color-sidebar-bg: #0F172A;
-    --color-topbar-bg: #0F172A;
+    --color-sidebar-bg: var(--color-surface);
+    --color-topbar-bg: var(--color-surface);
     --color-table-row-hover: rgba(255, 255, 255, 0.03);
   }
 
