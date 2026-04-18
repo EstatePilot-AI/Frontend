@@ -12,10 +12,13 @@ export const ENDPOINTS = {
   },
   LEADS: {
     GET_ALL: '/LeadRequest/GetAllLeads',
+    FILTER: '/LeadRequest/FilterLeads',
+    GET_STATUS_LIST: '/LeadRequest/GetStatusList',
   },
   CALL_LOGS: {
     GET_ALL: '/CallLog/GetAllCallLogs',
     GET_BY_ID: '/CallLog/GetCallLogById',
+    GET_CALL_OUTCOME: '/CallLog/GetCallOutcome',
   },
   CONVERSATION: {
     GET_DATA_BY_ID: '/GetConversationData/GetDataById',

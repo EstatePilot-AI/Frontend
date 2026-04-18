@@ -86,12 +86,12 @@ const Deals = () => {
   return (
     <>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[var(--color-text)]">Deals</h1>
-        <p className="text-sm text-[var(--color-text-muted)] mt-1">Track and manage property deals</p>
+        <h1 className="text-2xl font-bold text-(--color-text)">Deals</h1>
+        <p className="text-sm text-(--color-text-muted) mt-1">Track and manage property deals</p>
       </div>
 
       {error && (
-        <div className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)] text-[var(--color-danger)] px-4 py-3 rounded-[var(--radius-md)] mb-6 text-sm">
+        <div className="bg-(--color-danger-soft) border border-(--color-danger) text-(--color-danger) px-4 py-3 rounded-md mb-6 text-sm">
           {error}
         </div>
       )}
@@ -196,15 +196,15 @@ const Deals = () => {
                 <Card key={deal.dealId ?? `deal-card-${idx}`} className="p-4">
                   <div className="flex items-start justify-between gap-2 mb-3">
                     <div>
-                      <p className="text-sm font-semibold text-[var(--color-text)]">Buyer: {deal.buyer}</p>
-                      <p className="text-sm text-[var(--color-text-secondary)] mt-0.5">Seller: {deal.seller}</p>
+                      <p className="text-sm font-semibold text-(--color-text)">Buyer: {deal.buyer}</p>
+                      <p className="text-sm text-(--color-text-secondary) mt-0.5">Seller: {deal.seller}</p>
                     </div>
                     <Badge tone={statusToneMap[deal.dealStatus] || 'neutral'}>{deal.dealStatus || 'N/A'}</Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
-                      <p className="text-xs text-[var(--color-text-muted)]">Amount</p>
-                      <p className="font-medium text-[var(--color-text)]">EGP {deal.finalSaleAmount?.toLocaleString()}</p>
+                      <p className="text-xs text-(--color-text-muted)">Amount</p>
+                      <p className="font-medium text-(--color-text)">EGP {deal.finalSaleAmount?.toLocaleString()}</p>
                     </div>
                     {!isAgent && (
                       <div>
@@ -226,7 +226,7 @@ const Deals = () => {
                   <Button variant="secondary" size="sm" onClick={() => dispatch(setPagination({ PageNumber: Math.max(1, safePageNumber - 1) }))} disabled={safePageNumber === 1}>Prev</Button>
                   {visiblePageNumbers.map((pn) =>
                     typeof pn !== 'number' ? (
-                      <span key={pn} className="px-2 text-[var(--color-text-muted)] text-sm">...</span>
+                      <span key={pn} className="px-2 text-(--color-text-muted) text-sm">...</span>
                     ) : (
                       <Button key={pn} variant={safePageNumber === pn ? 'primary' : 'secondary'} size="sm" onClick={() => dispatch(setPagination({ PageNumber: pn }))} className="min-w-9">{pn}</Button>
                     )

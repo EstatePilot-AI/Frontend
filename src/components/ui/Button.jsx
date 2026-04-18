@@ -1,7 +1,7 @@
 import React from 'react'
 
 const baseClasses =
-  'inline-flex items-center justify-center rounded-[var(--radius-md)] font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
+  'inline-flex items-center justify-center rounded-md font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary) disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
 
 const sizeClasses = {
   xs: 'px-2.5 py-1.5 text-xs',
@@ -12,17 +12,17 @@ const sizeClasses = {
 
 const variantClasses = {
   primary:
-    'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-hover)]',
+    'bg-(--color-primary) text-white hover:bg-(--color-primary-hover) active:bg-(--color-primary-hover)',
   secondary:
-    'bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-muted)] active:bg-[var(--color-surface-muted)]',
+    'bg-(--color-surface) border border-(--color-border) text-(--color-text-secondary) hover:bg-(--color-surface-muted) active:bg-(--color-surface-muted)',
   ghost:
-    'bg-transparent text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-muted)]',
+    'bg-transparent text-(--color-text-secondary) hover:bg-(--color-surface-muted)',
   danger:
-    'bg-[var(--color-danger)] text-white hover:opacity-90 active:opacity-90',
+    'bg-(--color-danger) text-white hover:opacity-90 active:opacity-90',
   chipActive:
-    'bg-[var(--color-primary)] text-[#022C22] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-hover)]',
+    'bg-(--color-primary) text-(--color-text-inverse) hover:bg-(--color-primary-hover) active:bg-(--color-primary-hover)',
   chipInactive:
-    'bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-muted)] active:bg-[var(--color-surface-muted)]',
+    'bg-(--color-surface-elevated) text-(--color-text-secondary) hover:bg-(--color-surface-muted) active:bg-(--color-surface-muted)',
 }
 
 const Button = ({
