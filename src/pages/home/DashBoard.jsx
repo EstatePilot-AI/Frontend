@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo, lazy, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchGlobalAnalytics } from '../../redux/slices/DashboardSlice/dashboardReducer'
-import { FiPhone, FiUsers, FiTrendingUp, FiActivity, FiClock } from 'react-icons/fi'
+import { FiPhone, FiUsers, FiTrendingUp, FiActivity, FiClock, FiDollarSign, FiBriefcase } from 'react-icons/fi'
 import Card from '../../components/ui/Card'
 import Skeleton from '../../components/ui/Skeleton'
 import EmptyState from '../../components/ui/EmptyState'
@@ -20,6 +20,17 @@ const PropertyStatusBarChart = lazy(() => import('./components/charts/PropertySt
 const getActiveTheme = () => {
   if (typeof document === 'undefined') return 'light'
   return document.documentElement.getAttribute('data-theme') || 'light'
+}
+
+const formatCurrency = (value) => {
+  if (value == null || Number.isNaN(Number(value))) return '—'
+
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value))
 }
 
 const KpiCard = ({ label, value, icon }) => {
@@ -96,10 +107,21 @@ const DashBoard = () => {
   const kpiCards = useMemo(() => {
     const m = analytics?.keyMetrics || {}
 
+    const totalRevenue = m.totalRevenue ?? analytics?.totalRevenue
+    const averageDealValue = m.averageDealValue ?? analytics?.averageDealValue
+    const dealConversionRate = m.dealConversionRate ?? analytics?.dealConversionRate
+    const conversionRate = m.conversionRate
+      ?? m.callConversionRate
+      ?? analytics?.conversionRate
+      ?? analytics?.callConversionRate
+
     return [
       { label: 'Total Engagements', value: m.totalEngagements?.toLocaleString() ?? '—', icon: FiPhone },
       { label: 'Qualified Leads', value: m.qualifiedLeads?.toLocaleString() ?? '—', icon: FiUsers },
-      { label: 'Conversion Rate', value: m.conversionRate != null ? `${m.conversionRate.toFixed(1)}%` : '—', icon: FiTrendingUp },
+      { label: 'Conversion Rate', value: conversionRate != null ? `${Number(conversionRate).toFixed(1)}%` : '—', icon: FiTrendingUp },
+      { label: 'Total Revenue', value: formatCurrency(totalRevenue), icon: FiDollarSign },
+      { label: 'Average Deal Value', value: formatCurrency(averageDealValue), icon: FiBriefcase },
+      { label: 'Deal Conversion Rate', value: dealConversionRate != null ? `${Number(dealConversionRate).toFixed(1)}%` : '—', icon: FiTrendingUp },
       { label: 'Resource Hours', value: m.resourceOptimizationHours != null ? `${m.resourceOptimizationHours.toFixed(1)} hrs` : '—', icon: FiClock },
       { label: 'Avg Handle Time', value: formatSeconds(m.averageHandlingTime), icon: FiActivity },
     ]
@@ -199,9 +221,9 @@ const DashBoard = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {loading
-          ? Array.from({ length: 5 }).map((_, i) => (
+          ? Array.from({ length: 8 }).map((_, i) => (
               <Card key={i} className="p-5">
                 <Skeleton className="h-3 w-2/3 mb-3" />
                 <Skeleton className="h-8 w-1/2" />
