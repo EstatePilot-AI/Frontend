@@ -16,7 +16,12 @@ const Agents = () => {
           icon={FiUsers}
           title="No agents yet"
           description="Agents will appear here as they are added to the system."
-          action={<Button><FiPlus size={16} className="mr-2" />Add Agent</Button>}
+          action={
+            <Button>
+              <FiPlus size={16} className="mr-2" />
+              Add Agentfdfdfd
+            </Button>
+          }
         />
       </Card>
     </>
