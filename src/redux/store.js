@@ -5,6 +5,7 @@ import leadsReducer from './slices/LeadsSclice/LeadesReducer'
 import userReducer from './slices/UserSlice/UserReducer'
 import dealsReducer from './slices/DealsSlice/DealsRducer'
 import dashboardReducer from './slices/DashboardSlice/dashboardReducer'
+import agentReducer from './slices/AgentSlice/AgentReducer'
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     user: userReducer,
     deals: dealsReducer,
     dashboard: dashboardReducer,
+    agent: agentReducer,
   },
 })

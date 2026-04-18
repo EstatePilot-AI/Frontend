@@ -27,4 +27,7 @@ export const ENDPOINTS = {
   DASHBOARD: {
     GET_GLOBAL_ANALYTICS: '/Dashboard/GetGlobalAnalytics',
   },
+  AGENT: {
+    GET_ALL: '/Account/GetAllUsers',
+  },
 }

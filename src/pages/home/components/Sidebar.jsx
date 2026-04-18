@@ -124,15 +124,20 @@ const SideBar = ({ isOpen, onClose }) => {
                   {group.label}
                 </span>
               </div>
-              {group.items.map((item) => (
-                <NavItem
-                  key={item.path}
-                  icon={item.icon}
-                  label={item.label}
-                  isActive={isActive(item.path)}
-                  onClick={() => handleNav(item.path)}
-                />
-              ))}
+              {group.items.map((item) => {
+                if (item.label === 'Agents' && user?.role?.toLowerCase() === 'agent') {
+                  return null
+                }
+                return (
+                  <NavItem
+                    key={item.path}
+                    icon={item.icon}
+                    label={item.label}
+                    isActive={isActive(item.path)}
+                    onClick={() => handleNav(item.path)}
+                  />
+                )
+              })}
             </div>
           ))}
         </nav>
