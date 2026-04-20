@@ -15,10 +15,28 @@ export const fetchGlobalAnalytics = createAsyncThunk(
   }
 )
 
+export const uploadCSVForSellers = createAsyncThunk(
+  'dashboard/uploadCSVForSellers',
+  async (file, { rejectWithValue }) => {
+    try {
+      const formData = new FormData()
+      formData.append('file', file, file.name)
+      const response = await dashboardService.uploadCSVForSellers(formData)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error, 'Failed to upload CSV'))
+    }
+  }
+)
+
 const initialState = {
   analytics: null,
   loading: false,
   error: null,
+  uploading: false,
+  uploadSuccess: false,
+  uploadData: null,
+  uploadError: null,
 }
 
 const dashboardSlice = createSlice({
@@ -27,6 +45,9 @@ const dashboardSlice = createSlice({
   reducers: {
     clearDashboardError: (state) => {
       state.error = null
+      state.uploadError = null
+      state.uploadSuccess = false
+      state.uploadData = null
     },
   },
   extraReducers: (builder) => {
@@ -43,6 +64,22 @@ const dashboardSlice = createSlice({
       .addCase(fetchGlobalAnalytics.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
+      })
+      .addCase(uploadCSVForSellers.pending, (state) => {
+        state.uploading = true
+        state.uploadError = null
+        state.uploadSuccess = false
+      })
+      .addCase(uploadCSVForSellers.fulfilled, (state, action) => {
+        state.uploading = false
+        state.uploadSuccess = true
+        state.uploadData = action.payload
+        state.uploadError = null
+      })
+      .addCase(uploadCSVForSellers.rejected, (state, action) => {
+        state.uploading = false
+        state.uploadError = action.payload
+        state.uploadSuccess = false
       })
   },
 })
