@@ -1,7 +1,16 @@
 import React, { useEffect, useState, useMemo, lazy, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchGlobalAnalytics } from '../../redux/slices/DashboardSlice/dashboardReducer'
-import { FiPhone, FiUsers, FiTrendingUp, FiActivity, FiClock, FiDollarSign, FiBriefcase } from 'react-icons/fi'
+import {
+  FiPhone,
+  FiUsers,
+  FiTrendingUp,
+  FiActivity,
+  FiClock,
+  FiDollarSign,
+  FiBriefcase,
+} from 'react-icons/fi'
+import UploadCSVSection from './components/UploadCSVSection'
 import Card from '../../components/ui/Card'
 import Skeleton from '../../components/ui/Skeleton'
 import EmptyState from '../../components/ui/EmptyState'
@@ -60,7 +69,11 @@ const ChartSuspenseFallback = () => (
     <Skeleton className="h-4 w-1/3 mb-4" />
     <div className="h-75 flex items-end gap-2">
       {[40, 68, 56, 84, 61, 72].map((height, index) => (
-        <Skeleton key={height + index} className="flex-1 rounded-t-sm" style={{ height: `${height}%` }} />
+        <Skeleton
+          key={height + index}
+          className="flex-1 rounded-t-sm"
+          style={{ height: `${height}%` }}
+        />
       ))}
     </div>
   </Card>
@@ -69,6 +82,7 @@ const ChartSuspenseFallback = () => (
 const DashBoard = () => {
   const dispatch = useDispatch()
   const { analytics, loading, error } = useSelector((state) => state.dashboard)
+  const profile = useSelector((state) => state.user?.profile)
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
   const [activeTheme, setActiveTheme] = useState(getActiveTheme)
@@ -110,28 +124,47 @@ const DashBoard = () => {
     const totalRevenue = m.totalRevenue ?? analytics?.totalRevenue
     const averageDealValue = m.averageDealValue ?? analytics?.averageDealValue
     const dealConversionRate = m.dealConversionRate ?? analytics?.dealConversionRate
-    const conversionRate = m.conversionRate
-      ?? m.callConversionRate
-      ?? analytics?.conversionRate
-      ?? analytics?.callConversionRate
+    const conversionRate =
+      m.conversionRate ??
+      m.callConversionRate ??
+      analytics?.conversionRate ??
+      analytics?.callConversionRate
 
     return [
       { label: 'Total Revenue', value: formatCurrency(totalRevenue), icon: FiDollarSign },
       { label: 'Average Deal Value', value: formatCurrency(averageDealValue), icon: FiBriefcase },
-      { label: 'Deal Conversion Rate', value: dealConversionRate != null ? `${Number(dealConversionRate).toFixed(1)}%` : '—', icon: FiTrendingUp },
-      { label: 'Total Engagements', value: m.totalEngagements?.toLocaleString() ?? '—', icon: FiPhone },
+      {
+        label: 'Deal Conversion Rate',
+        value: dealConversionRate != null ? `${Number(dealConversionRate).toFixed(1)}%` : '—',
+        icon: FiTrendingUp,
+      },
+      {
+        label: 'Total Engagements',
+        value: m.totalEngagements?.toLocaleString() ?? '—',
+        icon: FiPhone,
+      },
       { label: 'Qualified Leads', value: m.qualifiedLeads?.toLocaleString() ?? '—', icon: FiUsers },
-      { label: 'Conversion Rate', value: conversionRate != null ? `${Number(conversionRate).toFixed(1)}%` : '—', icon: FiTrendingUp },
-      { label: 'Resource Hours', value: m.resourceOptimizationHours != null ? `${m.resourceOptimizationHours.toFixed(1)} hrs` : '—', icon: FiClock },
+      {
+        label: 'Conversion Rate',
+        value: conversionRate != null ? `${Number(conversionRate).toFixed(1)}%` : '—',
+        icon: FiTrendingUp,
+      },
+      {
+        label: 'Resource Hours',
+        value:
+          m.resourceOptimizationHours != null
+            ? `${m.resourceOptimizationHours.toFixed(1)} hrs`
+            : '—',
+        icon: FiClock,
+      },
       { label: 'Avg Handle Time', value: formatSeconds(m.averageHandlingTime), icon: FiActivity },
     ]
   }, [analytics])
 
   const outcomeChartData = useMemo(() => {
     const theme = getDashboardChartTheme(activeTheme)
-    return mapOutcomeDistributionData(
-      analytics?.outcomeDistributions,
-      (name, index) => getCategoryColor(name, theme, index)
+    return mapOutcomeDistributionData(analytics?.outcomeDistributions, (name, index) =>
+      getCategoryColor(name, theme, index)
     )
   }, [analytics, activeTheme])
 
@@ -141,9 +174,8 @@ const DashBoard = () => {
 
   const propertyChartData = useMemo(() => {
     const theme = getDashboardChartTheme(activeTheme)
-    return mapPropertyStatusData(
-      analytics?.propertyInventoryStatus,
-      (name, index) => getCategoryColor(name, theme, index)
+    return mapPropertyStatusData(analytics?.propertyInventoryStatus, (name, index) =>
+      getCategoryColor(name, theme, index)
     )
   }, [analytics, activeTheme])
 
@@ -175,8 +207,24 @@ const DashBoard = () => {
             </p>
           </div>
         </div>
+
+        {(() => {
+          const userRole = (profile?.role || profile?.userRole || profile?.roleName || '').toLowerCase()
+          if (userRole === 'super admin' || userRole === 'superadmin') {
+            return (
+              <div className="mb-6">
+                <UploadCSVSection />
+              </div>
+            )
+          }
+          return null
+        })()}
+
         <Card className="p-4 border-dashed">
-          <form onSubmit={handleApplyFilter} className="flex flex-col md:flex-row md:items-end gap-3">
+          <form
+            onSubmit={handleApplyFilter}
+            className="flex flex-col md:flex-row md:items-end gap-3"
+          >
             <label className="flex-1 min-w-45">
               <span className="text-xs font-medium uppercase tracking-wide text-(--color-text-muted)">
                 From
@@ -231,8 +279,7 @@ const DashBoard = () => {
             ))
           : kpiCards.map((card) => (
               <KpiCard key={card.label} label={card.label} value={card.value} icon={card.icon} />
-            ))
-        }
+            ))}
       </div>
 
       {!loading && !analytics && (

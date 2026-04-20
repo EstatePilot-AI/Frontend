@@ -29,6 +29,7 @@ export const ENDPOINTS = {
   },
   DASHBOARD: {
     GET_GLOBAL_ANALYTICS: '/Dashboard/GetGlobalAnalytics',
+    UPLOAD_CSV_FOR_SELLERS: '/Contact/UploadCSVForSellers',
   },
   AGENT: {
     GET_ALL: '/Account/GetAllUsers',
