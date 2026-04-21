@@ -10,7 +10,7 @@ import {
   FiDollarSign,
   FiBriefcase,
 } from 'react-icons/fi'
-import UploadCSVSection from './components/UploadCSVSection'
+
 import Card from '../../components/ui/Card'
 import Skeleton from '../../components/ui/Skeleton'
 import EmptyState from '../../components/ui/EmptyState'
@@ -208,17 +208,7 @@ const DashBoard = () => {
           </div>
         </div>
 
-        {(() => {
-          const userRole = (profile?.role || profile?.userRole || profile?.roleName || '').toLowerCase()
-          if (userRole === 'super admin' || userRole === 'superadmin') {
-            return (
-              <div className="mb-6">
-                <UploadCSVSection />
-              </div>
-            )
-          }
-          return null
-        })()}
+
 
         <Card className="p-4 border-dashed">
           <form
