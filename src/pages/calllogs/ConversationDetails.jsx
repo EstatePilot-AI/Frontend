@@ -46,10 +46,14 @@ const ConversationDetails = () => {
 
   if (!data) return null
 
-  const collectedData = data.data_collection_results_list?.filter((i) => i.value !== null)
+  // const collectedData = data.data_collection_results_list?.filter((i) => i.value !== null)
+  const collectedData = data.data_collection_results_list
+  const dynamicVariables = data.dynamic_variables_list
   const transcript = data.transcript
-  const vars = data.dynamic_variables
-
+const vars = data.dynamic_variables_list.reduce((acc, curr) => {
+  acc[curr.dynamic_variable_id] = curr.value;
+  return acc;
+}, {});
   const totalCost = transcript?.reduce((acc, msg) => {
     const usage = msg.llm_usage?.model_usage
     if (!usage) return acc
@@ -94,14 +98,14 @@ const ConversationDetails = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           {[
-            { label: 'Lead Name', value: vars?.['leadInfo__name'] },
-            { label: 'Agent', value: vars?.['agentName'] },
-            { label: 'Call Type', value: vars?.['leadInfo__callType'] },
-            { label: 'Duration', value: `${vars?.['system__call_duration_secs']} sec` },
-            { label: 'Phone', value: vars?.['leadInfo__phone'] },
-            { label: 'Caller ID', value: vars?.['system__caller_id'] },
-            { label: 'Agent Turns', value: vars?.['system__agent_turns'] },
-            { label: 'Time', value: vars?.['system__time'] },
+            { label: 'Lead Name', value: vars?.leadInfo__name },
+            { label: 'Agent', value: vars?.agentName },
+            { label: 'Call Type', value: vars?.leadInfo__callType },
+            { label: 'Duration', value: `${vars?.system__call_duration_secs} sec` },
+            { label: 'Phone', value: vars?.leadInfo__phone },
+            { label: 'Caller ID', value: vars?.system__caller_id },
+            { label: 'Agent Turns', value: vars?.system__agent_turns },
+            { label: 'Time', value: vars?.system__time },
           ].map(({ label, value }) => (
             <div key={label} className="bg-[var(--color-surface-muted)] rounded-[var(--radius-md)] p-4">
               <p className="text-xs text-[var(--color-text-muted)] mb-1">{label}</p>
@@ -150,32 +154,29 @@ const ConversationDetails = () => {
               {collectedData.map((item) => (
                 <div key={item.data_collection_id} className="bg-[var(--color-surface-muted)] rounded-[var(--radius-sm)] px-3 py-1.5">
                   <span className="text-xs text-[var(--color-text-muted)]">{item.data_collection_id} · </span>
+                  {item.value === null ? (
+                    <span className="text-xs font-medium text-[var(--color-danger)]">null</span>
+                  ) : (
+                    <span className="text-xs font-medium text-[var(--color-success)]">{String(item.value)}</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
+        {dynamicVariables?.length > 0 && (
+          <Card className="p-5 mb-4">
+            <p className="text-xs text-[var(--color-text-muted)] font-medium mb-3 uppercase tracking-wide">Dynamic Variables</p>
+            <div className="flex flex-wrap gap-2">
+              {dynamicVariables.map((item) => (
+                <div key={item.dynamic_variable_id} className="bg-[var(--color-surface-muted)] rounded-[var(--radius-sm)] px-3 py-1.5">
+                  <span className="text-xs text-[var(--color-text-muted)]">{item.dynamic_variable_id} · </span>
                   <span className="text-xs font-medium text-[var(--color-success)]">{String(item.value)}</span>
                 </div>
               ))}
             </div>
           </Card>
         )}
-
-        <Card className="p-5 mb-4">
-          <p className="text-xs text-[var(--color-text-muted)] font-medium mb-3 uppercase tracking-wide">Dynamic Variables</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
-            {Object.entries(vars || {})
-              .filter(([key]) => key !== 'system__conversation_history')
-              .map(([key, value]) => (
-                <div
-                  key={key}
-                  className="flex justify-between items-center py-2 border-b border-[var(--color-border-subtle)] last:border-0"
-                >
-                  <span className="text-xs text-[var(--color-text-muted)] shrink-0 mr-4">{key}</span>
-                  <span className="text-xs font-medium text-[var(--color-text)] max-w-50 truncate text-right">
-                    {value === null ? '—' : String(value)}
-                  </span>
-                </div>
-              ))}
-          </div>
-        </Card>
-
         {agentMeta && (
           <Card className="p-5 mb-4">
             <p className="text-xs text-[var(--color-text-muted)] font-medium mb-3 uppercase tracking-wide">Agent Metadata</p>
@@ -245,19 +246,19 @@ const ConversationDetails = () => {
                   key={i}
                   className={`flex items-start gap-3 ${!isAgent ? 'flex-row-reverse' : ''}`}
                 >
-                  <div
+                  {/* <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0 ${
                       isAgent
                         ? 'bg-[var(--color-info-soft)] text-[var(--color-info)]'
                         : 'bg-[var(--color-success-soft)] text-[var(--color-success)]'
                     }`}
                   >
-                    {isAgent ? vars?.agentName?.[0] : vars?.['leadInfo__name']?.[0]}
-                  </div>
+                    {isAgent ? vars?.agentName?.[0] : vars?.leadInfo__name?.[0]}
+                  </div> */}
                   <div className={`flex flex-col ${!isAgent ? 'items-end' : ''}`}>
                     <div className="flex items-center gap-2 mb-1">
                       <p className="text-xs text-[var(--color-text-muted)]">
-                        {isAgent ? vars?.agentName : vars?.['leadInfo__name']} · {msg.time_in_call_secs}s
+                        {isAgent ? vars?.agentName : vars?.leadInfo__name} · {msg.time_in_call_secs}s
                       </p>
                       {msg.interrupted && <Badge tone="warning">interrupted</Badge>}
                     </div>
