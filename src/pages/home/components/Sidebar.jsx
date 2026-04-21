@@ -127,7 +127,14 @@ const SideBar = ({ isOpen, onClose }) => {
                 </span>
               </div>
               {group.items.map((item) => {
-                if (item.label === 'Agents' && user?.role?.toLowerCase() === 'agent') {
+                const userRole = (user?.role || user?.userRole || '').toLowerCase()
+                const isSuperAdmin = userRole === 'super admin' || userRole === 'superadmin'
+
+                if (item.label === 'Agents' && userRole === 'agent') {
+                  return null
+                }
+
+                if (item.label === 'Requests' && !isSuperAdmin) {
                   return null
                 }
                 return (
