@@ -9,6 +9,8 @@ export const useSignalR = (hubUrl, eventName, options = {}) => {
   const connectionRef = useRef(null);
 
   useEffect(() => {
+    if (!hubUrl) return;
+
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(hubUrl, {
         accessTokenFactory: () => localStorage.getItem('authToken') ?? '',
