@@ -130,7 +130,9 @@ const SideBar = ({ isOpen, onClose }) => {
                 const userRole = (user?.role || user?.userRole || '').toLowerCase()
                 const isSuperAdmin = userRole === 'super admin' || userRole === 'superadmin'
 
-                if (item.label === 'Agents' && userRole === 'agent') {
+                const isAgent = userRole === 'agent'
+
+                if (isAgent && ['Agents', 'Dashboard', 'Leads', 'Call Logs'].includes(item.label)) {
                   return null
                 }
 
