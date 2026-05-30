@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo, lazy, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchGlobalAnalytics } from '../../redux/slices/DashboardSlice/dashboardReducer'
+import { fetchGlobalAnalytics, updateAnalyticsRealtime } from '../../redux/slices/DashboardSlice/dashboardReducer'
+import { useSignalR } from '../../hooks/useSignalR'
 import {
   FiPhone,
   FiUsers,
@@ -104,6 +105,17 @@ const DashBoard = () => {
     return () => observer.disconnect()
   }, [])
 
+  const { data: realtimeData, connectionState } = useSignalR(
+    import.meta.env.VITE_HUB_URL,
+    'DashboardUpdate'
+  )
+
+  useEffect(() => {
+    if (realtimeData.length > 0) {
+      dispatch(updateAnalyticsRealtime(realtimeData[realtimeData.length - 1]))
+    }
+  }, [realtimeData, dispatch])
+
   const handleApplyFilter = (e) => {
     e.preventDefault()
     const params = {}
@@ -201,7 +213,23 @@ const DashBoard = () => {
       <div className="mb-8 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-(--color-text)">Dashboard</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-(--color-text)">Dashboard</h1>
+              <span className="flex items-center gap-1.5 text-xs font-medium">
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    connectionState === 'connected'
+                      ? 'bg-green-500'
+                      : connectionState === 'disconnected'
+                        ? 'bg-red-500'
+                        : 'bg-yellow-400'
+                  }`}
+                />
+                <span className="text-(--color-text-muted) capitalize">
+                  {connectionState === 'connected' ? 'Live' : connectionState}
+                </span>
+              </span>
+            </div>
             <p className="text-sm text-(--color-text-muted) mt-1">
               Executive overview of your CRM performance and activity trends.
             </p>

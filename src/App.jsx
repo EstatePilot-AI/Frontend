@@ -28,18 +28,21 @@ const App = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { token } = useSelector((state) => state.auth)
+  const profile = useSelector((state) => state.user.profile)
   const [theme, setTheme] = useState(getInitialTheme)
 
   useEffect(() => {
-    if (token) {
+    if (!token) {
+      navigate('/login')
+      return
+    }
+    if (!profile) {
       dispatch(getUser()).unwrap().catch(() => {
         dispatch(logout())
         navigate('/login')
       })
-    } else {
-      navigate('/login')
     }
-  }, [token, dispatch, navigate])
+  }, [token, profile, dispatch, navigate])
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)

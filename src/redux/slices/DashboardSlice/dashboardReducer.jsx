@@ -49,6 +49,9 @@ const dashboardSlice = createSlice({
       state.uploadSuccess = false
       state.uploadData = null
     },
+    updateAnalyticsRealtime: (state, action) => {
+      state.analytics = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -84,5 +87,5 @@ const dashboardSlice = createSlice({
   },
 })
 
-export const { clearDashboardError } = dashboardSlice.actions
+export const { clearDashboardError, updateAnalyticsRealtime } = dashboardSlice.actions
 export default dashboardSlice.reducer
