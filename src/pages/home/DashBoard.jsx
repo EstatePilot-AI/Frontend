@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useMemo, lazy, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchGlobalAnalytics, updateAnalyticsRealtime } from '../../redux/slices/DashboardSlice/dashboardReducer'
+import {
+  fetchGlobalAnalytics,
+  updateAnalyticsRealtime,
+} from '../../redux/slices/DashboardSlice/dashboardReducer'
 import { useSignalR } from '../../hooks/useSignalR'
+import toast from 'react-hot-toast'
 import {
   FiPhone,
   FiUsers,
@@ -105,16 +109,20 @@ const DashBoard = () => {
     return () => observer.disconnect()
   }, [])
 
-  const { data: realtimeData, connectionState } = useSignalR(
-    import.meta.env.VITE_HUB_URL,
-    'DashboardUpdate'
-  )
+  const hubUrl = (import.meta.env.VITE_BASE_URL || 'https://estatepilot.runasp.net/api')
+    .replace(/\/api$/, '') + '/dashboardHub'
+
+  const { lastUpdated, connectionState } = useSignalR(hubUrl, 'RefreshDashboardData', {
+    onConnected: () => toast.success('Real-time connected', { id: 'signalr', duration: 3000 }),
+    onDisconnected: () => toast.error('Real-time disconnected', { id: 'signalr', duration: 4000 }),
+    onError: (err) => toast.error(`Real-time error: ${err.message}`, { id: 'signalr', duration: 5000 }),
+  })
 
   useEffect(() => {
-    if (realtimeData.length > 0) {
-      dispatch(updateAnalyticsRealtime(realtimeData[realtimeData.length - 1]))
+    if (lastUpdated) {
+      dispatch(fetchGlobalAnalytics())
     }
-  }, [realtimeData, dispatch])
+  }, [lastUpdated, dispatch])
 
   const handleApplyFilter = (e) => {
     e.preventDefault()
@@ -235,8 +243,6 @@ const DashBoard = () => {
             </p>
           </div>
         </div>
-
-
 
         <Card className="p-4 border-dashed">
           <form
