@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useMemo, lazy, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Navigate } from 'react-router-dom'
 import {
   fetchGlobalAnalytics,
   updateAnalyticsRealtime,
 } from '../../redux/slices/DashboardSlice/dashboardReducer'
 import { useSignalR } from '../../hooks/useSignalR'
-import toast from 'react-hot-toast'
 import {
   FiPhone,
   FiUsers,
@@ -112,11 +112,7 @@ const DashBoard = () => {
   const hubUrl = (import.meta.env.VITE_BASE_URL || 'https://estatepilot.runasp.net/api')
     .replace(/\/api$/, '') + '/dashboardHub'
 
-  const { lastUpdated, connectionState } = useSignalR(hubUrl, 'RefreshDashboardData', {
-    onConnected: () => toast.success('Real-time connected', { id: 'signalr', duration: 3000 }),
-    onDisconnected: () => toast.error('Real-time disconnected', { id: 'signalr', duration: 4000 }),
-    onError: (err) => toast.error(`Real-time error: ${err.message}`, { id: 'signalr', duration: 5000 }),
-  })
+  const { lastUpdated, connectionState } = useSignalR(hubUrl, 'RefreshDashboardData')
 
   useEffect(() => {
     if (lastUpdated) {
@@ -198,6 +194,10 @@ const DashBoard = () => {
       getCategoryColor(name, theme, index)
     )
   }, [analytics, activeTheme])
+
+  if (profile?.role?.toLowerCase() === 'agent') {
+    return <Navigate to="/deals" replace />
+  }
 
   if (error) {
     return (
