@@ -11,7 +11,7 @@ export const userService = {
     }),
 
   forgetPassword: ({ email }) =>
-    client.post(ENDPOINTS.USER.FORGET_PASSWORD, {
+    client.post(ENDPOINTS.AUTH.FORGET_PASSWORD, {
       email,
     }),
 

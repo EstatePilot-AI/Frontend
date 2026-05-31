@@ -2,11 +2,11 @@ export const ENDPOINTS = {
   AUTH: {
     LOGIN: '/Account/Login',
     LOGOUT: '/Account/Logout',
+    FORGET_PASSWORD: '/Account/ForgetPassword',
   },
   USER: {
     GET_MY_PROFILE: '/Account/GetMyProfile',
     CHANGE_PASSWORD: '/Account/ChangePassword',
-    FORGET_PASSWORD: '/Account/ForgetPassword',
     RESET_PASSWORD: '/Account/ResetPassword',
     CREATE_NEW_USER: '/Account/CreateNewUser',
   },
