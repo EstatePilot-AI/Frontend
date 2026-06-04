@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useMemo, lazy, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
-import {
-  fetchGlobalAnalytics,
-  updateAnalyticsRealtime,
-} from '../../redux/slices/DashboardSlice/dashboardReducer'
+import { fetchGlobalAnalytics, updateAnalyticsRealtime } from '../../redux/slices/DashboardSlice/dashboardReducer'
 import { useSignalR } from '../../hooks/useSignalR'
 import {
   FiPhone,
@@ -112,13 +109,15 @@ const DashBoard = () => {
   const hubUrl = (import.meta.env.VITE_BASE_URL || 'https://estatepilot.runasp.net/api')
     .replace(/\/api$/, '') + '/dashboardHub'
 
-  const { lastUpdated, connectionState } = useSignalR(hubUrl, 'RefreshDashboardData')
-
-  useEffect(() => {
-    if (lastUpdated) {
-      dispatch(fetchGlobalAnalytics())
-    }
-  }, [lastUpdated, dispatch])
+  const { connectionState } = useSignalR(hubUrl, 'ReceiveDashboardUpdate', {
+    onData: (data) => {
+      if (data) {
+        dispatch(updateAnalyticsRealtime(data))
+      } else {
+        dispatch(fetchGlobalAnalytics())
+      }
+    },
+  })
 
   const handleApplyFilter = (e) => {
     e.preventDefault()

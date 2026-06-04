@@ -18,6 +18,7 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
   const navigate = useNavigate()
 
   const handleClick = () => {
+    if (!callLog.callRecordingId || callLog.callRecordingId === 'null') return
     navigate(`/conversation/${callLog.callRecordingId}`)
   }
 
@@ -55,7 +56,7 @@ const CallLogDetailModal = ({ callLog, isOpen, onClose, loading, error }) => {
             <DetailField label="Timestamp" value={new Date(callLog.timeStamp).toLocaleString()} />
           </div>
 
-          {callLog.callRecordingId && (
+          {callLog.callRecordingId && callLog.callRecordingId !== 'null' && (
             <button
               onClick={handleClick}
               className="text-sm font-medium text-[var(--color-primary)] hover:underline"
