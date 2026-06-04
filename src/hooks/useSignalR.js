@@ -1,12 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import * as signalR from '@microsoft/signalr';
 
-
 export const useSignalR = (hubUrl, eventName, options = {}) => {
-  const [data, setData] = useState([]);
   const [connectionState, setConnectionState] = useState('disconnected');
-  const [lastUpdated, setLastUpdated] = useState(null);
   const connectionRef = useRef(null);
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
 
   useEffect(() => {
     if (!hubUrl) return;
@@ -14,20 +13,22 @@ export const useSignalR = (hubUrl, eventName, options = {}) => {
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(hubUrl, {
         accessTokenFactory: () => localStorage.getItem('authToken') ?? '',
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
       })
       .withAutomaticReconnect()
+      .configureLogging(signalR.LogLevel.Information)
       .build();
 
     connection.onreconnecting(() => setConnectionState('reconnecting'));
     connection.onreconnected(() => setConnectionState('connected'));
     connection.onclose(() => {
       setConnectionState('disconnected');
-      options.onDisconnected?.();
+      optionsRef.current.onDisconnected?.();
     });
 
     connection.on(eventName, (payload) => {
-      setData(prev => Array.isArray(payload) ? payload : [...prev, payload]);
-      setLastUpdated(new Date());
+      optionsRef.current.onData?.(payload);
     });
 
     const startConnection = async () => {
@@ -35,11 +36,12 @@ export const useSignalR = (hubUrl, eventName, options = {}) => {
         setConnectionState('connecting');
         await connection.start();
         setConnectionState('connected');
-        options.onConnected?.();
+        optionsRef.current.onConnected?.();
       } catch (err) {
         setConnectionState('disconnected');
-        options.onError?.(err);
-        console.error('SignalR Connection Error:', err);
+        optionsRef.current.onError?.(err);
+        console.error('SignalR URL:', hubUrl);
+        console.error('SignalR Error:', err?.message || err);
       }
     };
 
@@ -61,5 +63,5 @@ export const useSignalR = (hubUrl, eventName, options = {}) => {
     throw new Error('SignalR: Cannot invoke method while disconnected');
   };
 
-  return { data, connectionState, invoke, lastUpdated };
+  return { connectionState, invoke };
 };

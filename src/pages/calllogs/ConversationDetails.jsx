@@ -41,7 +41,17 @@ const ConversationDetails = () => {
 
   if (conversationError)
     return (
-      <div className="p-6 text-[var(--color-danger)]">{conversationError}</div>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-center p-6">
+        <div className="w-full max-w-md p-4 rounded-md bg-(--color-danger-soft) border border-(--color-danger) text-(--color-danger) text-sm">
+          {conversationError}
+        </div>
+        <button
+          onClick={() => navigate(-1)}
+          className="text-sm text-(--color-primary) hover:underline"
+        >
+          ← Back
+        </button>
+      </div>
     )
 
   if (!data) return null
