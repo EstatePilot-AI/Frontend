@@ -251,6 +251,9 @@ const ConversationDetails = () => {
               ?.replace(/\.(?=\S)/g, '. ')
               ?.trim()
 
+            const originalTrimmed = msg.original_message?.trim()
+            const showOriginal = msg.interrupted && originalTrimmed && originalTrimmed !== msg.message?.trim()
+
             return (
               <div key={i} className={`flex gap-3 ${isAgent ? 'justify-start' : 'justify-end'}`}>
                 {isAgent && (
@@ -275,28 +278,33 @@ const ConversationDetails = () => {
                   <div
                     dir="auto"
                     className={`
-              px-4 py-3 rounded-2xl
-              text-sm leading-7
-              whitespace-pre-wrap break-words
-              shadow-sm transition-all duration-200
-              hover:shadow-md
-              text-right
-              ${
-                isAgent
-                  ? `
-                    bg-[var(--color-surface-muted)]
-                    text-[var(--color-text)]
-                    rounded-tl-md
-                  `
-                  : `
-                    bg-[var(--color-primary)]
-                    text-white
-                    rounded-tr-md
-                  `
-              }
-            `}
+                px-4 py-3 rounded-2xl
+                text-sm leading-7
+                whitespace-pre-wrap wrap-break-word
+                shadow-sm transition-all duration-200
+                hover:shadow-md
+                text-right
+                ${
+                  isAgent
+                    ? `
+                      bg-(--color-surface-muted)
+                      text-(--color-text)
+                      rounded-tl-md
+                    `
+                    : `
+                      bg-(--color-primary)
+                      text-white
+                      rounded-tr-md
+                    `
+                }
+              `}
                   >
                     {formattedMessage}
+                    {showOriginal && (
+                      <span className={`italic opacity-50 ${isAgent ? 'text-(--color-text)' : 'text-white'}`}>
+                        {' '}{originalTrimmed}
+                      </span>
+                    )}
                   </div>
                 </div>
 
